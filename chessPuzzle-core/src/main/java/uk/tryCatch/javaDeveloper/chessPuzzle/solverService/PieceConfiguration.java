@@ -1,4 +1,4 @@
-package uk.tryCatch.javaDeveloper.chessPuzzle;
+package uk.tryCatch.javaDeveloper.chessPuzzle.solverService;
 
 import uk.tryCatch.javaDeveloper.chessPuzzle.exception.InvalidPieceException;
 import uk.tryCatch.javaDeveloper.chessPuzzle.piece.Piece;
@@ -22,7 +22,7 @@ public class PieceConfiguration {
    /** Number total of pieces */
    private int totalNumberOfPieces;
    /** Ordered list of all pieces of the configuration */
-   List<Piece> pieceList;
+   private List<Piece> pieceList;
 
 // -- Constructors
 //--------------------------------------------------------------------------------------------------

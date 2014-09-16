@@ -80,7 +80,7 @@ public class ChessBoard implements Cloneable {
     *
     * @return <tt>Cell</tt> corresponding to the <tt>Position</tt> passed by parameter.
     */
-   public Cell getCell(Position position) {
+   public final Cell getCell(Position position) {
       return gridBoard[position.getRow()][position.getColumn()];
    }
 
@@ -164,7 +164,7 @@ public class ChessBoard implements Cloneable {
     *
     * @return List with all positions of the chess borad.
     */
-   public List<Position> getAllPosition() {
+   public final List<Position> getAllPosition() {
       return positionList;
    }
 

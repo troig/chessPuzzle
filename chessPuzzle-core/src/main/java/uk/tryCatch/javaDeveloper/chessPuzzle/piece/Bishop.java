@@ -41,10 +41,9 @@ public class Bishop extends Piece {
     */
    @Override
    public Set<Position> availableMovements(ChessBoard chessBoard, Position sourcePos) {
-      // TODO (troig 14/09/14) Review and optimize (make a method with param right/left)
       Set<Position> availPositionSet = new HashSet<>();
 
-      // Diagonoal movements to the right ;
+      // Diagonoal movements to the right
       int maxRowColumn = Math.max(chessBoard.getNumRows(), chessBoard.getNumColums());
       int index = 1;
       for (int i = sourcePos.getRow(); i < maxRowColumn; i++) {
