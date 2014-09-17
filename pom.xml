@@ -18,7 +18,7 @@
     <modules>
         <module>chessPuzzle-core</module>
         <module>chessPuzzle-console</module>
-        <!--module>chessPuzzle-front</module-->
+        <module>chessPuzzle-front</module>
     </modules>
 
     <build>
@@ -39,6 +39,7 @@
 
     <dependencyManagement>
         <dependencies>
+            <!-- Spring dependencies -->
             <dependency>
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-context</artifactId>
@@ -51,6 +52,33 @@
                 <version>${spring.version}</version>
             </dependency>
 
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-webmvc</artifactId>
+                <version>${spring.version}</version>
+            </dependency>
+
+            <!-- Servlet and jsp dependencies -->
+            <dependency>
+                <groupId>javax.servlet</groupId>
+                <artifactId>servlet-api</artifactId>
+                <version>2.5</version>
+                <scope>provided</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>javax.servlet</groupId>
+                <artifactId>jstl</artifactId>
+                <version>1.1.2</version>
+            </dependency>
+
+            <dependency>
+                <groupId>taglibs</groupId>
+                <artifactId>standard</artifactId>
+                <version>1.1.2</version>
+            </dependency>
+
+            <!-- Project module dependencies -->
             <dependency>
                 <groupId>uk.tryCatch.javaDeveloper</groupId>
                 <artifactId>chessPuzzle-core</artifactId>
