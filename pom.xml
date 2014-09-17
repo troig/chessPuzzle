@@ -11,10 +11,14 @@
     <version>1.0.0-SNAPSHOT</version>
     <name>chessPuzzle-parent</name>
 
+    <properties>
+        <spring.version>4.0.5.RELEASE</spring.version>
+    </properties>
+
     <modules>
         <module>chessPuzzle-core</module>
-        <!--module>chessPuzzle-console</module>
-        <module>chessPuzzle-front</module-->
+        <module>chessPuzzle-console</module>
+        <!--module>chessPuzzle-front</module-->
     </modules>
 
     <build>
@@ -38,7 +42,19 @@
             <dependency>
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-context</artifactId>
-                <version>4.0.5.RELEASE</version>
+                <version>${spring.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-core</artifactId>
+                <version>${spring.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>uk.tryCatch.javaDeveloper</groupId>
+                <artifactId>chessPuzzle-core</artifactId>
+                <version>${project.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

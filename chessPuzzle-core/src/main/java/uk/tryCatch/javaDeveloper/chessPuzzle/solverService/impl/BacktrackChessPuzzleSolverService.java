@@ -54,7 +54,7 @@ public class BacktrackChessPuzzleSolverService implements ChessPuzzleSolverServi
 
       } catch (Exception e) {
          // Unexpected error has produced trying to solve the puzzle. Add an erro to the solution
-         solution.setError(new ChessException("Error trying to solve the puzzle"));
+         solution.setError(new ChessException("Error trying to solve the puzzle: " + e.getMessage()));
       }
 
       // Finally, set the time to proces

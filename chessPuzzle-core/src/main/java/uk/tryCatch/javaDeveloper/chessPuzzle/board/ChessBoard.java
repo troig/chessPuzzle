@@ -249,7 +249,6 @@ public class ChessBoard implements Cloneable {
          }
          builder.append("\n");
       }
-      builder.append("\n");
       return builder.toString();
    }
 }
