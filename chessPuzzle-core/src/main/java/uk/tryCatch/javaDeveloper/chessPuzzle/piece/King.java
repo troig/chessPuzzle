@@ -3,7 +3,7 @@ package uk.tryCatch.javaDeveloper.chessPuzzle.piece;
 import uk.tryCatch.javaDeveloper.chessPuzzle.board.ChessBoard;
 import uk.tryCatch.javaDeveloper.chessPuzzle.board.Position;
 
-import java.util.Set;
+import java.util.BitSet;
 
 import static uk.tryCatch.javaDeveloper.chessPuzzle.piece.PieceType.KING;
 
@@ -28,21 +28,18 @@ public class King extends Piece {
 //--------------------------------------------------------------------------------------------------
 
    @Override
-   public boolean canAttack(ChessBoard chessBoard, Position source, Position target) {
-      // TODO (troig 14/09/14) Let's do it!
-      return false;
-   }
+   public BitSet availableMovementsMask(ChessBoard chessBoard, Position sourcePos) {
+      BitSet movements = new BitSet(chessBoard.getNumRows() * chessBoard.getNumColums());
+      // King can move one position over x/y and diagonal
+      addMovement(chessBoard, sourcePos, movements, 0, 1);
+      addMovement(chessBoard, sourcePos, movements, 1, 1);
+      addMovement(chessBoard, sourcePos, movements, 1, 0);
+      addMovement(chessBoard, sourcePos, movements, 1, -1);
+      addMovement(chessBoard, sourcePos, movements, 0, -1);
+      addMovement(chessBoard, sourcePos, movements, -1, -1);
+      addMovement(chessBoard, sourcePos, movements, -1, 0);
+      addMovement(chessBoard, sourcePos, movements, -1, 1);
 
-   /**
-    * Return a set with all <tt>Bishop</tt> available movements for given <tt>chessBoard</tt> and <tt>sourcePos</tt>.
-    *
-    * @param chessBoard Chess board
-    * @param sourcePos  Source position
-    * @return All <tt>Bishop</tt> available movements for given <tt>chessBoard</tt> and <tt>sourcePos</tt>.
-    */
-   @Override
-   public Set<Position> availableMovements(ChessBoard chessBoard, Position sourcePos) {
-      // TODO (troig 14/09/14) Let's do it!
-      return null;
+      return movements;
    }
 }

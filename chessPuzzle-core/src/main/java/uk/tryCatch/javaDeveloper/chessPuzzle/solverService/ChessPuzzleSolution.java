@@ -86,6 +86,16 @@ public class ChessPuzzleSolution {
    }
 
    /**
+    * Check if the <tt>chessBoard</tt> is contained as a solution.
+    *
+    * @param chessBoard Chess board with a solution
+    * @return <tt>true</tt> if  <tt>chessBoard</tt> is contained as a solution.
+    */
+   public boolean containsSolution(ChessBoard chessBoard) {
+      return chessBoardSet.contains(chessBoard);
+   }
+
+   /**
     * Returns the detailed error of the solution.
     *
     * @return Exception thrown by the solver in case of error

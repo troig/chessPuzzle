@@ -35,17 +35,17 @@ public class BacktrackChessPuzzleSolverService implements ChessPuzzleSolverServi
    @Override
    public ChessPuzzleSolution solve(int numRowsBoard, int numColumsBoard,
                                     PieceConfiguration pieceConfiguration) throws ChessException {
-      // TODO (troig 16/09/14) Optimize. Combine all diferents combinations of imputs (different pieces). Threading
 
-      // 1. Create and initialize the ChessBoard
-      ChessBoard chessBoard = new ChessBoard(numRowsBoard, numColumsBoard);
-
-      // 2. Try to solve the puzzle with backtracking
-      ChessPuzzleSolution solution = new ChessPuzzleSolution();
       long initProcess = System.currentTimeMillis();
-
+      ChessPuzzleSolution solution = new ChessPuzzleSolution();
       try {
+         // No pieces to place: We can return
+         if (pieceConfiguration.getTotalNumberOfPieces() == 0) throw new ChessException("Any piece to place");
 
+         // 1. Create and initialize the ChessBoard
+         ChessBoard chessBoard = new ChessBoard(numRowsBoard, numColumsBoard);
+
+         // 2. Try to solve the puzzle with backtracking
          solve(chessBoard,                                  // Chess board to solve
                0,                                           // Index to the position to start to chech a solution
                pieceConfiguration.getPieceList(),           // List of pieces to place on the chess board
@@ -86,7 +86,10 @@ public class BacktrackChessPuzzleSolverService implements ChessPuzzleSolverServi
 
       // If all pieces are placed, a solution is found.
       if (pieceToPlace == 0) {
-         solution.addChessBoard((ChessBoard) chessBoard.clone());
+         if (!solution.containsSolution(chessBoard)) {
+            solution.addChessBoard((ChessBoard) chessBoard.clone());
+         }
+
          // All positions of the board are checkd -> Return
          if (posIndex == allPosition.size()) {
             return true;
@@ -97,9 +100,14 @@ public class BacktrackChessPuzzleSolverService implements ChessPuzzleSolverServi
       // at this position
       for (int i = posIndex; i < allPosition.size(); i++) {
          Position position = allPosition.get(i);
+         int numPiece = pieceToPlace - 1;
+
+         // Break recursion if has no more pieces
+         if (numPiece < 0) return false;
+
+         Piece piece = pieceList.get(numPiece);
          // Piece can be placed is cell is empty and cannot be attacked from any other piece on the board
-         if (chessBoard.isEmpty(position) && !chessBoard.canBeAttacked(position)) {
-            Piece piece = pieceList.get(pieceToPlace - 1);
+         if (chessBoard.isEmpty(position) && chessBoard.canBePlacedNonAttack(piece, position)) {
             // Place piece on the chess board
             chessBoard.addPiece(position, piece);
 

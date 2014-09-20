@@ -58,10 +58,10 @@ public class ChessPuzzle {
 
       // Output available solutions
       if (solution.hasError()) {
-         System.out.println("UNEXPECTED : " + solution.getError().getMessage());
+         System.out.println(solution.getError().getMessage());
       } else {
          System.out.println("\nTotal solutions: " + solution.totalSolutions());
-         System.out.println("Time process     : " + solution.getTimeProcess() + " ms\n");
+         System.out.println("Time process   : " + solution.getTimeProcess() + " ms\n");
 
          if (solution.hasSolution()) {
             int numSolution = 1;

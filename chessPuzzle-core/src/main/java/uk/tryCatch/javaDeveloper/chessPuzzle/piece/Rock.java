@@ -3,8 +3,7 @@ package uk.tryCatch.javaDeveloper.chessPuzzle.piece;
 import uk.tryCatch.javaDeveloper.chessPuzzle.board.ChessBoard;
 import uk.tryCatch.javaDeveloper.chessPuzzle.board.Position;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.BitSet;
 
 import static uk.tryCatch.javaDeveloper.chessPuzzle.piece.PieceType.ROCK;
 
@@ -29,27 +28,24 @@ public class Rock extends Piece {
 //--------------------------------------------------------------------------------------------------
 
    @Override
-   public boolean canAttack(ChessBoard chessBoard, Position source, Position target) {
-      // TODO (troig 14/09/14) Let's do it!
-      return false;
-   }
-
-   @Override
-   public Set<Position> availableMovements(ChessBoard chessBoard, Position sourcePos) {
-      // TODO (troig 14/09/14) Review and optimize
-      Set<Position> availPositionSet = new HashSet<>();
+   public BitSet availableMovementsMask(ChessBoard chessBoard, Position sourcePos) {
+      // Binary mask representation for the available rock movements from sourcePos
+      BitSet movmentMask = new BitSet(chessBoard.getNumRows() * chessBoard.getNumColums());
 
       // Movements over X coordinate (rows)
       for (int row = 0; row < chessBoard.getNumRows(); row++) {
          Position rowPosition = new Position(row, sourcePos.getColumn());
-         if (!rowPosition.equals(sourcePos)) availPositionSet.add(rowPosition);
+         movmentMask.set(rowPosition.getRow() + chessBoard.getNumColums() * rowPosition.getColumn());
+
       }
       // Movements over Y coordinate (columns)
       for (int column = 0; column < chessBoard.getNumColums(); column++) {
          Position rowPosition = new Position(sourcePos.getRow(), column);
-         if (!rowPosition.equals(sourcePos)) availPositionSet.add(rowPosition);
+         movmentMask.set(rowPosition.getRow() + chessBoard.getNumColums() * rowPosition.getColumn());
       }
 
-      return availPositionSet;
+      // Exclude the source position
+      movmentMask.clear(sourcePos.getRow() + chessBoard.getNumColums() * sourcePos.getColumn());
+      return movmentMask;
    }
 }

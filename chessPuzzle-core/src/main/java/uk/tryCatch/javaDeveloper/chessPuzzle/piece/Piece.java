@@ -3,7 +3,7 @@ package uk.tryCatch.javaDeveloper.chessPuzzle.piece;
 import uk.tryCatch.javaDeveloper.chessPuzzle.board.ChessBoard;
 import uk.tryCatch.javaDeveloper.chessPuzzle.board.Position;
 
-import java.util.Set;
+import java.util.BitSet;
 
 /**
  * Abstract definition of a chess <tt>Piece</tt>
@@ -31,25 +31,24 @@ public abstract class Piece implements Cloneable {
 //--------------------------------------------------------------------------------------------------
 
    /**
-    * Return a set with all available movements for the piece with the <tt>chessBoard</tt> and source position passed
-    * by parameter.
+    * Returns a <tt>Binary</tt> mask respresentation with all available movements for the piece with the
+    * <tt>chessBoard</tt> and source position passed by parameter.<br/>
+    * Example for 3x3 board:
+    * <pre>
+    * (0,2) (1,2) (2,2)
+    * (0,1) (1,1) (2,1)
+    * (0,0) (1,0) (2,0) -> (0,0) (1,0) (2,0) (0,1) (1,1) (2,1) (0,2) (1,2) (2,2) -> 000000000
+    *
+    * No movements -> 000000000
+    * Piece Queen, sourcePos (0,0): Queen can move to (1,0), (2,0), (0,1), (0,2), (1,1), (2,2) -> 011110101
+    *
+    * </pre>
     *
     * @param chessBoard Chess board
     * @param sourcePos  Source position
-    * @return All available movements for the piece
+    * @return <tt>Binary</tt> mask respresentation with all available movements for the piece
     */
-   public abstract Set<Position> availableMovements(ChessBoard chessBoard, Position sourcePos);
-
-   /**
-    * Check if the piece on the <tt>chessBoard</tt> placed on position <tt>source</tt> can attack the position
-    * <tt>target</tt>
-    *
-    * @param chessBoard Chess board
-    * @param source     Source position (where piece is placed)
-    * @param target     Target position (check if piece can attack it)
-    * @return <tt>true</tt> if the piece on position <tt>source</tt> can attack the position <tt>target></tt>
-    */
-   public abstract boolean canAttack(ChessBoard chessBoard, Position source, Position target);
+   public abstract BitSet availableMovementsMask(ChessBoard chessBoard, Position sourcePos);
 
 // -- Public methods
 //--------------------------------------------------------------------------------------------------
@@ -59,12 +58,39 @@ public abstract class Piece implements Cloneable {
     *
     * @return Piece type
     */
-   public PieceType getPieceType() {
+   public final PieceType getPieceType() {
       return pieceType;
    }
 
+   @SuppressWarnings("CloneDoesntCallSuperClone")
    @Override
    public Object clone() throws CloneNotSupportedException {
-      return super.clone();
+      try {
+         // Clone with reflection
+         return getClass().getDeclaredConstructor().newInstance();
+      } catch (Exception ex) {
+         throw new CloneNotSupportedException();
+      }
+   }
+
+   // -- Protected methods
+//--------------------------------------------------------------------------------------------------
+
+   /**
+    * Add a movement to the mask <tt>movements</tt> taking as reference the <tt>sourcePos</tt>, moving
+    * <tt>offsetRow</tt> positions over X coordinate and <tt>offsetColumn</tt> positions over Y.
+    *
+    * @param chessBoard   Chess Board
+    * @param sourcePos    Source position
+    * @param movements    <tt>Binary</tt> mask respresentation with all available movements for the piece
+    * @param offsetRow    Positions to move over X coordinate
+    * @param offsetColumn Positions to move over Y coordinate
+    */
+   protected void addMovement(ChessBoard chessBoard, Position sourcePos, BitSet movements, int offsetRow,
+                              int offsetColumn) {
+      Position position = new Position(sourcePos.getRow() + offsetRow, sourcePos.getColumn() + offsetColumn);
+      if (chessBoard.contains(position)) {
+         movements.set(position.getRow() + chessBoard.getNumColums() * position.getColumn());
+      }
    }
 }

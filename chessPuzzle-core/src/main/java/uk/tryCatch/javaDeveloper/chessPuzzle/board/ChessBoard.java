@@ -1,13 +1,14 @@
 package uk.tryCatch.javaDeveloper.chessPuzzle.board;
 
 
+import uk.tryCatch.javaDeveloper.chessPuzzle.exception.ChessException;
+import uk.tryCatch.javaDeveloper.chessPuzzle.exception.InvalidPieceException;
 import uk.tryCatch.javaDeveloper.chessPuzzle.exception.InvalidPositionException;
 import uk.tryCatch.javaDeveloper.chessPuzzle.piece.Piece;
+import uk.tryCatch.javaDeveloper.chessPuzzle.piece.PieceFactory;
+import uk.tryCatch.javaDeveloper.chessPuzzle.piece.PieceType;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Definition of the chess board. We understand a <tt>ChessBoard</tt> like a bi dimensional matrix of <tt>Cell</tt> with
@@ -27,6 +28,8 @@ public class ChessBoard implements Cloneable {
    private List<Position> positionList;
    /** Set that contains all positions of the chess board occupied (containing a piece) */
    private Set<Position> positionOccupiedSet;
+   /** Cache with a binary mask representation of all available movement for each piece for each position */
+   private Map<Position, Map<PieceType, BitSet>> movementsCache = new HashMap<>();
 
 // -- Constructors
 //--------------------------------------------------------------------------------------------------
@@ -37,7 +40,7 @@ public class ChessBoard implements Cloneable {
     * @param numRows   Number of rows of the chess board
     * @param numColums Number of columns of the chess board
     */
-   public ChessBoard(int numRows, int numColums) {
+   public ChessBoard(int numRows, int numColums) throws ChessException {
       this.numRows = numRows;
       this.numColums = numColums;
 
@@ -52,6 +55,13 @@ public class ChessBoard implements Cloneable {
             this.gridBoard[row][column] = new Cell(position);
          }
       }
+
+      // Pre-Cache a binary mask of all available movements for each piece for each position on the ChessBoard
+      loadMovementsCache();
+   }
+
+   /** Private Constructor only for clone purpose */
+   private ChessBoard() {
    }
 
 // -- Public methods
@@ -169,39 +179,68 @@ public class ChessBoard implements Cloneable {
    }
 
    /**
-    * Check if the <tt>position</tt> passed by parameter can be attacked for any piece placed on the chess board.
+    * Check if the <tt>piece</tt> on the <tt>position</tt> passed by parameter can be placed 'Non attack' on the board.
+    * This means:
+    * <ul>
+    * <li>Piece is not attacked for other pieces already placed on the board</li>
+    * <li>Piece no attacks other pieces already placed on the board</li>
+    * </ul>
     *
+    * @param piece    Chess piece
     * @param position Position on the chess board
     * @return <tt>true</tt> if <tt>position</tt> can be attacked for any piece placed on the chess board.
     */
-   public boolean canBeAttacked(Position position) {
+   public boolean canBePlacedNonAttack(Piece piece, Position position) {
+      if (positionOccupiedSet.isEmpty()) return true;
+
+      // Check piece is not attacked
       for (Position positionOccupied : positionOccupiedSet) {
-         Piece piece = getCell(positionOccupied).getPiece();
-         // TODO (troig 15/09/14) Change and call to piece.canAttack(this, positionOccupied, position)
-         Set<Position> setPosibleMovements = piece.availableMovements(this, positionOccupied);
-         if (setPosibleMovements.contains(position)) return true;
+         Piece otherPiece = getCell(positionOccupied).getPiece();
+         int positionMask = position.getRow() + getNumColums() * position.getColumn();
+
+         // Test if the bit of the position 'posMask' is marked.
+         if (movementsCache.get(positionOccupied).get(otherPiece.getPieceType()).get(positionMask)) {
+            return false;
+         }
       }
-      return false;
+
+      // Check that piece no attack other pieces
+      for (Position positionOccupied : positionOccupiedSet) {
+         int positionOccupiedMask = positionOccupied.getRow() + getNumColums() * positionOccupied.getColumn();
+         if (movementsCache.get(position).get(piece.getPieceType()).get(positionOccupiedMask)) {
+            return false;
+         }
+      }
+      return true;
    }
 
    @SuppressWarnings("RedundantIfStatement")
    @Override
    public boolean equals(Object o) {
-      // TODO (troig 14/09/14) CHANGE. PROVISIONAL ONLY FOR TEST PURPOSE
-      return toString().equals(o.toString());
+      if (this == o) return true;
+      if (!(o instanceof ChessBoard)) return false;
+
+      ChessBoard chessBoard = (ChessBoard) o;
+
+      // Use a chessBoard key to comparision, for performance reasons
+      if (!createChessBoardKey(chessBoard).equals(createChessBoardKey(this))) return false;
+      return true;
    }
 
    @Override
    public int hashCode() {
-      // TODO (troig 14/09/14) CHANGE. PROVISIONAL ONLY FOR TEST PURPOSE
-      return toString().hashCode();
+      // Use a chessBoard key to hashCoding, for performance reasons
+      return createChessBoardKey(this).hashCode();
    }
 
    @SuppressWarnings("CloneDoesntCallSuperClone")
    @Override
    public Object clone() throws CloneNotSupportedException {
-      // TODO (troig 14/09/14) CHANGE. PROVISIONAL ONLY FOR TEST PURPOSE
-      ChessBoard copy = new ChessBoard(this.numRows, this.numColums);
+      ChessBoard copy = new ChessBoard();
+      copy.numRows = numRows;
+      copy.numColums = numColums;
+
+      // Copy gridBoard
       Cell[][] gridBoardCopy = new Cell[numRows][numColums];
       for (int row = 0; row < numRows; row++) {
          for (int column = 0; column < numColums; column++) {
@@ -224,31 +263,85 @@ public class ChessBoard implements Cloneable {
       }
       copy.positionOccupiedSet = positionOccupiedSetCopy;
 
+      // Copy movements cache
+      Map<Position, Map<PieceType, BitSet>> movementsCacheCopy = new Hashtable<>();
+      for (Position position : movementsCache.keySet()) {
+         Map<PieceType, BitSet> movementsByPieceCopy = new Hashtable<>();
+         Map<PieceType, BitSet> movementsByPiece = movementsCache.get(position);
+         for (PieceType pieceType : movementsByPiece.keySet()) {
+            movementsByPieceCopy.put(pieceType, (BitSet) movementsByPiece.get(pieceType).clone());
+         }
+         movementsCacheCopy.put((Position) position.clone(), movementsByPieceCopy);
+      }
+      copy.movementsCache = movementsCacheCopy;
+
       return copy;
    }
 
    /**
     * String represetnation of the chess board.<br/>
-    *
-    * Example:<p/></p>
-    * * Q * * * <br/>
-    * * * * Q * <br/>
-    * * * Q * * <br/>
-    * Q * * * * <br/>
+    * <pre>
+    * Example:
+    * * Q * * *
+    * * * * Q *
+    * * * Q * *
+    * Q * * * *
+    * </pre>
     *
     * @return String respresentation of the chess board
     */
    @Override
    public String toString() {
-      StringBuilder builder = new StringBuilder();
+      StringBuilder chessBoardString = new StringBuilder();
       for (Cell[] cellArray : gridBoard) {
          for (Cell cell : cellArray) {
             Piece piece = cell.getPiece();
-            builder.append((piece == null) ? "*" : piece.getPieceType().getShortName());
-            builder.append(" ");
+            chessBoardString.append((piece == null) ? "*" : piece.getPieceType().getShortName());
+            chessBoardString.append(" ");
          }
-         builder.append("\n");
+         chessBoardString.append("\n");
       }
-      return builder.toString();
+      return chessBoardString.toString();
+   }
+
+// -- Private methods
+//--------------------------------------------------------------------------------------------------
+
+   /**
+    * Load the local cache <tt>movementsCache</tt> with a binary mask representation of all available movement for
+    * each piece for each position.
+    *
+    * @throws InvalidPieceException Error creating piece
+    */
+   private void loadMovementsCache() throws InvalidPieceException {
+      // Init a List with an instance of each piece
+      List<Piece> pieceList = new ArrayList<>();
+      for (PieceType pieceType : PieceType.values()) {
+         pieceList.add(PieceFactory.createPiece(pieceType));
+      }
+      for (Position position : positionList) {
+         Map<PieceType, BitSet> movementsByPiece = new HashMap<>();
+         for (Piece piece : pieceList) {
+            movementsByPiece.put(piece.getPieceType(), piece.availableMovementsMask(this, position));
+         }
+         movementsCache.put(position, movementsByPiece);
+      }
+   }
+
+   /**
+    * Generates a unique key for the representation of the <tt>ChessBoard</tt>.<br/>
+    * Format: ****Q**B***
+    *
+    * @return <tt>ChessBoard</tt> key
+    */
+   private String createChessBoardKey(ChessBoard chessBoard) {
+      StringBuilder chessBoardKey = new StringBuilder();
+      for (Cell[] cellArray : chessBoard.gridBoard) {
+         for (Cell cell : cellArray) {
+            Piece piece = cell.getPiece();
+            chessBoardKey.append((piece == null) ? "*" : piece.getPieceType().getShortName());
+         }
+      }
+      return chessBoardKey.toString();
    }
 }

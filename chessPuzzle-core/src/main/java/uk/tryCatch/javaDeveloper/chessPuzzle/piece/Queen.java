@@ -3,7 +3,7 @@ package uk.tryCatch.javaDeveloper.chessPuzzle.piece;
 import uk.tryCatch.javaDeveloper.chessPuzzle.board.ChessBoard;
 import uk.tryCatch.javaDeveloper.chessPuzzle.board.Position;
 
-import java.util.Set;
+import java.util.BitSet;
 
 import static uk.tryCatch.javaDeveloper.chessPuzzle.piece.PieceType.QUEEN;
 
@@ -14,9 +14,9 @@ import static uk.tryCatch.javaDeveloper.chessPuzzle.piece.PieceType.QUEEN;
  */
 public class Queen extends Piece {
 
-   /** Queen movements: Rock + Bishop: Final instance of piece Rock to take avantadge of this movememnt engine */
+   /** Queen movements: Rock + Bishop. Final instance of piece Rock to take avantadge of this movememnt engine */
    private final Rock rock = new Rock();
-   /** Queen movements: Rock + Bishop: Final instance of piece Bishop to take avantadge of this movememnt engine */
+   /** Queen movements: Rock + Bishop. Final instance of piece Bishop to take avantadge of this movememnt engine */
    private final Bishop bishop = new Bishop();
 
 // -- Constructors
@@ -33,17 +33,12 @@ public class Queen extends Piece {
 //--------------------------------------------------------------------------------------------------
 
    @Override
-   public boolean canAttack(ChessBoard chessBoard, Position source, Position target) {
-      // TODO (troig 14/09/14) Let's do it!
-      return false;
-   }
-
-   @Override
-   public Set<Position> availableMovements(ChessBoard chessBoard, Position sourcePos) {
-      // TODO (troig 14/09/14) Find a more elegant solution (I don't like have having private instances of rock/bishop
+   public BitSet availableMovementsMask(ChessBoard chessBoard, Position sourcePos) {
       // Queen movements: Rock + Bishop movements
-      Set<Position> positionSet = rock.availableMovements(chessBoard, sourcePos);
-      positionSet.addAll(bishop.availableMovements(chessBoard, sourcePos));
-      return positionSet;
+      BitSet rockMovementMask = rock.availableMovementsMask(chessBoard, sourcePos);
+      BitSet bishopMovementMask = bishop.availableMovementsMask(chessBoard, sourcePos);
+
+      rockMovementMask.or(bishopMovementMask);
+      return rockMovementMask;
    }
 }

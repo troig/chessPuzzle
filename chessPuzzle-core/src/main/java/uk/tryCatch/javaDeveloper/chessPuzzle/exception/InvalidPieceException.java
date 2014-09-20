@@ -5,7 +5,7 @@ package uk.tryCatch.javaDeveloper.chessPuzzle.exception;
  *
  * @author troig
  */
-public class InvalidPieceException extends Exception {
+public class InvalidPieceException extends ChessException {
 
 // -- Constructors
 //--------------------------------------------------------------------------------------------------

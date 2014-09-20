@@ -3,8 +3,7 @@ package uk.tryCatch.javaDeveloper.chessPuzzle.piece;
 import uk.tryCatch.javaDeveloper.chessPuzzle.board.ChessBoard;
 import uk.tryCatch.javaDeveloper.chessPuzzle.board.Position;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.BitSet;
 
 /**
  * Definition of <tt>Bishop</tt> chess piece
@@ -27,33 +26,17 @@ public class Bishop extends Piece {
 //--------------------------------------------------------------------------------------------------
 
    @Override
-   public boolean canAttack(ChessBoard chessBoard, Position source, Position target) {
-      // TODO (troig 14/09/14) Let's do it!
-      return false;
-   }
+   public BitSet availableMovementsMask(ChessBoard chessBoard, Position sourcePos) {
+      BitSet movements = new BitSet(chessBoard.getNumRows() * chessBoard.getNumColums());
 
-   /**
-    * Return a set with all <tt>Bishop</tt> available movements for given <tt>chessBoard</tt> and <tt>sourcePos</tt>.
-    *
-    * @param chessBoard Chess board
-    * @param sourcePos  Source position
-    * @return All <tt>Bishop</tt> available movements for given <tt>chessBoard</tt> and <tt>sourcePos</tt>.
-    */
-   @Override
-   public Set<Position> availableMovements(ChessBoard chessBoard, Position sourcePos) {
-      Set<Position> availPositionSet = new HashSet<>();
-
-      // Diagonoal movements to the right
+      // Diagonoal movements to the right ;
       int maxRowColumn = Math.max(chessBoard.getNumRows(), chessBoard.getNumColums());
       int index = 1;
       for (int i = sourcePos.getRow(); i < maxRowColumn; i++) {
          // Riht Up position
-         Position positionUp = new Position(sourcePos.getRow() + index, sourcePos.getColumn() + index);
-         if (chessBoard.contains(positionUp) && !positionUp.equals(sourcePos)) availPositionSet.add(positionUp);
-
+         addMovement(chessBoard, sourcePos, movements, index, index);
          // Right down position
-         Position positionDown = new Position(sourcePos.getRow() + index, sourcePos.getColumn() - index);
-         if (chessBoard.contains(positionDown) && !positionDown.equals(sourcePos)) availPositionSet.add(positionDown);
+         addMovement(chessBoard, sourcePos, movements, index, -index);
          index++;
       }
 
@@ -62,14 +45,11 @@ public class Bishop extends Piece {
       index = 1;
       for (int i = maxRowColumn; i >= 0; i--) {
          // Left Up position
-         Position positionUp = new Position(sourcePos.getRow() - index, sourcePos.getColumn() + index);
-         if (chessBoard.contains(positionUp) && !positionUp.equals(sourcePos)) availPositionSet.add(positionUp);
+         addMovement(chessBoard, sourcePos, movements, -index, index);
          // Left Down position
-         Position positionDown = new Position(sourcePos.getRow() - index, sourcePos.getColumn() - index);
-         if (chessBoard.contains(positionDown) && !positionDown.equals(sourcePos)) availPositionSet.add(positionDown);
+         addMovement(chessBoard, sourcePos, movements, -index, -index);
          index++;
       }
-
-      return availPositionSet;
+      return movements;
    }
 }
