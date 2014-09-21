@@ -1,5 +1,6 @@
 package uk.tryCatch.javaDeveloper.chessPuzzle.solverService.impl;
 
+import com.google.common.collect.Collections2;
 import uk.tryCatch.javaDeveloper.chessPuzzle.board.ChessBoard;
 import uk.tryCatch.javaDeveloper.chessPuzzle.board.Position;
 import uk.tryCatch.javaDeveloper.chessPuzzle.exception.ChessException;
@@ -9,6 +10,7 @@ import uk.tryCatch.javaDeveloper.chessPuzzle.solverService.ChessPuzzleSolverServ
 import uk.tryCatch.javaDeveloper.chessPuzzle.solverService.PieceConfiguration;
 
 import java.util.List;
+import java.util.Stack;
 
 /**
  * Implementation of <tt>ChessPuzzleSolverService</tt> based on <tt>Backtracking</tt> algorithm.
@@ -16,6 +18,9 @@ import java.util.List;
  * @author troig
  */
 public class BacktrackChessPuzzleSolverService implements ChessPuzzleSolverService {
+
+   /** Number threads used to find all posible solutions */
+   private static final int numThreadsProcess = 10;
 
 // -- Methods inherited from interface ChessPuzzleSolverService
 //--------------------------------------------------------------------------------------------------
@@ -41,16 +46,30 @@ public class BacktrackChessPuzzleSolverService implements ChessPuzzleSolverServi
       try {
          // No pieces to place: We can return
          if (pieceConfiguration.getTotalNumberOfPieces() == 0) throw new ChessException("Any piece to place");
+         if (pieceConfiguration.getTotalNumberOfPieces() > 6) throw new ChessException("Maximum 6 pieces to place");
 
          // 1. Create and initialize the ChessBoard
          ChessBoard chessBoard = new ChessBoard(numRowsBoard, numColumsBoard);
 
-         // 2. Try to solve the puzzle with backtracking
-         solve(chessBoard,                                  // Chess board to solve
-               0,                                           // Index to the position to start to chech a solution
-               pieceConfiguration.getPieceList(),           // List of pieces to place on the chess board
-               pieceConfiguration.getTotalNumberOfPieces(), // Number total of pieces to place on the chess board
-               solution);                                   // Solution collector
+         List<Piece> pieceList = pieceConfiguration.getPieceList();
+
+         // Create a stack with all posible piece configuration. (Ex: QBR -> QBR, QRB, BQR, BRQ, RQB, RBQ)
+         /** TODO (troig 21/09/2014): Very poor performance solution. Don't use all combinations, only which are really needed. */
+         /** TODO (troig 21/09/2014): Make heuristics to determine best cell to try to place every piece. */
+         Stack<List<Piece>> pieceListCombinationStack = new Stack<>();
+         pieceListCombinationStack.addAll(Collections2.orderedPermutations(pieceList));
+
+
+         // 2. N process try to solve the puzzle for different piece configuration combination
+         int numThreads = numThreadsProcess < pieceListCombinationStack.size()
+               ? numThreadsProcess
+               : pieceListCombinationStack.size();
+
+         Thread[] arrayThread = new Thread[numThreads];
+         for (int i = 0; i < numThreads; i++) {
+            arrayThread[i] = new SolverThread(chessBoard, pieceListCombinationStack, solution);
+            arrayThread[i].join();
+         }
 
       } catch (Exception e) {
          // Unexpected error has produced trying to solve the puzzle. Add an erro to the solution
@@ -121,5 +140,57 @@ public class BacktrackChessPuzzleSolverService implements ChessPuzzleSolverServi
       }
 
       return false;
+   }
+
+   @SuppressWarnings("SynchronizationOnLocalVariableOrMethodParameter")
+   /**
+    * Thread to solve the puzzle.
+    */
+   private class SolverThread extends Thread {
+      /** Chess board */
+      private ChessBoard chessBoard;
+      /** Stack with all combinations of piece configuration */
+      private Stack<List<Piece>> pieceListCombinationStack;
+      /** Puzzle solution collector */
+      private ChessPuzzleSolution solution;
+
+      /**
+       * Constutor of <tt>SolverThread</tt>
+       *
+       * @param chessBoard                Chess Board
+       * @param pieceListCombinationStack Stack with all combinations of piece configuration
+       * @param solution                  Puzzle solution collector
+       * @throws Exception Unexpected errors trying to solve the puzzle
+       */
+      private SolverThread(ChessBoard chessBoard,
+                           Stack<List<Piece>> pieceListCombinationStack,
+                           ChessPuzzleSolution solution) throws Exception {
+         this.chessBoard = chessBoard;
+         this.pieceListCombinationStack = pieceListCombinationStack;
+         this.solution = solution;
+         start();
+      }
+
+      @SuppressWarnings("SynchronizeOnNonFinalField")
+      @Override
+      public void run() {
+         try {
+            while (!pieceListCombinationStack.isEmpty()) {
+               List<Piece> pieceList;
+               synchronized (pieceListCombinationStack) {
+                  pieceList = pieceListCombinationStack.pop();
+               }
+               if (pieceList != null) {
+                  solve(chessBoard,       // Chess board to solve
+                        0,                // Index to the position to start to chech a solution
+                        pieceList,        // List of pieces to place on the chess board
+                        pieceList.size(), // Number total of pieces to place on the chess board
+                        solution);        // Solution collector
+               }
+            }
+         } catch (Exception e) {
+            e.printStackTrace();
+         }
+      }
    }
 }

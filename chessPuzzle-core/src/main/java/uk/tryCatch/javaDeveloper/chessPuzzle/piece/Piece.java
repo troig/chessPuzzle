@@ -10,7 +10,7 @@ import java.util.BitSet;
  *
  * @author troig
  */
-public abstract class Piece implements Cloneable {
+public abstract class Piece implements Cloneable, Comparable<Piece> {
 
    /** Chess pieces type */
    final protected PieceType pieceType;
@@ -71,6 +71,11 @@ public abstract class Piece implements Cloneable {
       } catch (Exception ex) {
          throw new CloneNotSupportedException();
       }
+   }
+
+   @Override
+   public int compareTo(@SuppressWarnings("NullableProblems") Piece otherPiece) {
+      return pieceType.compareTo(otherPiece.getPieceType());
    }
 
    // -- Protected methods

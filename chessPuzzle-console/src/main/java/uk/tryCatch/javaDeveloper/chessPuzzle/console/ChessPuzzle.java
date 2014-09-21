@@ -32,18 +32,18 @@ public class ChessPuzzle {
       Scanner scanner = new Scanner(System.in);
 
       System.out.println("\nWelcome to chess puzzle solver.");
-      System.out.println("Board dimensions and number of pieces to place have been limited for performance reasons\n");
+      System.out.println("Board dimensions (6x6) and number of pieces (6) to place have been limited for performance reasons\n");
 
       // Board dimensions
-      int numRowsBoard = scanNumber(scanner, "board rows", 2, 7);
-      int numColumnsBoard = scanNumber(scanner, "board columns", 2, 7);
+      int numRowsBoard = scanNumber(scanner, "board rows", 2, 6);
+      int numColumnsBoard = scanNumber(scanner, "board columns", 2, 6);
 
       // Piece configuration
-      int numQueens = scanNumber(scanner, "queens", 0, 5);
-      int numBishop = scanNumber(scanner, "bishops", 0, 5);
-      int numRock = scanNumber(scanner, "rocks", 0, 5);
-      int numKnight = scanNumber(scanner, "knights", 0, 5);
-      int numKing = scanNumber(scanner, "kings", 0, 5);
+      int numQueens = scanNumber(scanner, "queens", 0, 2);
+      int numBishop = scanNumber(scanner, "bishops", 0, 2);
+      int numRock = scanNumber(scanner, "rocks", 0, 2);
+      int numKnight = scanNumber(scanner, "knights", 0, 2);
+      int numKing = scanNumber(scanner, "kings", 0, 2);
 
       PieceConfiguration pieceConfiguration = new PieceConfiguration();
       pieceConfiguration.addPieces(QUEEN, numQueens);
