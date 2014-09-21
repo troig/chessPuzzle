@@ -16,6 +16,7 @@ public class IndexController {
 
    @RequestMapping(method = RequestMethod.GET)
    public ModelAndView index(){
+      /** TODO (troig 21/09/2014): Implement */
       return new ModelAndView("index");
    }
 }
