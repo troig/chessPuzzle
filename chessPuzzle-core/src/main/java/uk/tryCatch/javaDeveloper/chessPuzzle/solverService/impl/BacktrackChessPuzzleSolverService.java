@@ -67,11 +67,16 @@ public class BacktrackChessPuzzleSolverService implements ChessPuzzleSolverServi
 
          Thread[] arrayThread = new Thread[numThreads];
          for (int i = 0; i < numThreads; i++) {
-            arrayThread[i] = new SolverThread(chessBoard, pieceListCombinationStack, solution);
+            arrayThread[i] = new SolverThread((ChessBoard)chessBoard.clone(), pieceListCombinationStack, solution);
+            arrayThread[i].start();
+         }
+
+         for (int i = 0; i < numThreads; i++) {
             arrayThread[i].join();
          }
 
       } catch (Exception e) {
+         e.printStackTrace();
          // Unexpected error has produced trying to solve the puzzle. Add an erro to the solution
          solution.setError(new ChessException("Error trying to solve the puzzle: " + e.getMessage()));
       }
@@ -168,7 +173,6 @@ public class BacktrackChessPuzzleSolverService implements ChessPuzzleSolverServi
          this.chessBoard = chessBoard;
          this.pieceListCombinationStack = pieceListCombinationStack;
          this.solution = solution;
-         start();
       }
 
       @SuppressWarnings("SynchronizeOnNonFinalField")

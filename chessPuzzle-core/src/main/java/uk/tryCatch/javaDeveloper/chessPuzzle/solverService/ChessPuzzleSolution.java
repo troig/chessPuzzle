@@ -45,7 +45,7 @@ public class ChessPuzzleSolution {
     *
     * @param chessBoard <tt>ChessBoard</tt> filled with a solution for the puzzle.
     */
-   public void addChessBoard(ChessBoard chessBoard) {
+   public synchronized void addChessBoard(ChessBoard chessBoard) {
       chessBoardSet.add(chessBoard);
    }
 
