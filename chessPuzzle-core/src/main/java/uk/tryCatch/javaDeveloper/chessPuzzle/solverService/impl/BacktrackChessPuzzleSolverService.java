@@ -86,8 +86,9 @@ public class BacktrackChessPuzzleSolverService implements ChessPuzzleSolverServi
 
       // If all pieces are placed, a solution is found.
       if (pieceToPlace == 0) {
-         if (!solution.containsSolution(chessBoard)) {
-            solution.addChessBoard((ChessBoard) chessBoard.clone());
+         ChessBoard chessBoardSolved = chessBoard.slimCopyOf();
+         if (!solution.containsSolution(chessBoardSolved)) {
+            solution.addChessBoard(chessBoardSolved);
          }
 
          // All positions of the board are checkd -> Return

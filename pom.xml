@@ -78,6 +78,13 @@
                 <version>1.1.2</version>
             </dependency>
 
+            <dependency>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+                <version>4.9</version>
+                <scope>test</scope>
+            </dependency>
+
             <!-- Project module dependencies -->
             <dependency>
                 <groupId>uk.tryCatch.javaDeveloper</groupId>

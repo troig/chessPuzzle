@@ -42,7 +42,7 @@ public class ChessPuzzle {
       int numQueens = scanNumber(scanner, "queens", 0, 5);
       int numBishop = scanNumber(scanner, "bishops", 0, 5);
       int numRock = scanNumber(scanner, "rocks", 0, 5);
-      int numKnight = scanNumber(scanner, "knighs", 0, 5);
+      int numKnight = scanNumber(scanner, "knights", 0, 5);
       int numKing = scanNumber(scanner, "kings", 0, 5);
 
       PieceConfiguration pieceConfiguration = new PieceConfiguration();

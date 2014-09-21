@@ -78,19 +78,18 @@ public abstract class Piece implements Cloneable {
 
    /**
     * Add a movement to the mask <tt>movements</tt> taking as reference the <tt>sourcePos</tt>, moving
-    * <tt>offsetRow</tt> positions over X coordinate and <tt>offsetColumn</tt> positions over Y.
+    * <tt>offsetX</tt> positions over X coordinate and <tt>offsetY</tt> positions over Y.
     *
-    * @param chessBoard   Chess Board
-    * @param sourcePos    Source position
-    * @param movements    <tt>Binary</tt> mask respresentation with all available movements for the piece
-    * @param offsetRow    Positions to move over X coordinate
-    * @param offsetColumn Positions to move over Y coordinate
+    * @param chessBoard Chess Board
+    * @param sourcePos  Source position
+    * @param movements  <tt>Binary</tt> mask respresentation with all available movements for the piece
+    * @param offsetX    Positions to move over X coordinate
+    * @param offsetY    Positions to move over Y coordinate
     */
-   protected void addMovement(ChessBoard chessBoard, Position sourcePos, BitSet movements, int offsetRow,
-                              int offsetColumn) {
-      Position position = new Position(sourcePos.getRow() + offsetRow, sourcePos.getColumn() + offsetColumn);
+   protected void addMovement(ChessBoard chessBoard, Position sourcePos, BitSet movements, int offsetX, int offsetY) {
+      Position position = new Position(sourcePos.getX() + offsetX, sourcePos.getY() + offsetY);
       if (chessBoard.contains(position)) {
-         movements.set(position.getRow() + chessBoard.getNumColums() * position.getColumn());
+         movements.set(position.getX() + chessBoard.getNumColums() * position.getY());
       }
    }
 }

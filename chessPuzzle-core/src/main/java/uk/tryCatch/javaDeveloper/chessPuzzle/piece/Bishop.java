@@ -32,7 +32,7 @@ public class Bishop extends Piece {
       // Diagonoal movements to the right ;
       int maxRowColumn = Math.max(chessBoard.getNumRows(), chessBoard.getNumColums());
       int index = 1;
-      for (int i = sourcePos.getRow(); i < maxRowColumn; i++) {
+      for (int i = sourcePos.getX(); i < maxRowColumn; i++) {
          // Riht Up position
          addMovement(chessBoard, sourcePos, movements, index, index);
          // Right down position
@@ -41,7 +41,7 @@ public class Bishop extends Piece {
       }
 
       // Diagonal movements to the left
-      maxRowColumn = Math.max(sourcePos.getRow(), sourcePos.getColumn());
+      maxRowColumn = Math.max(sourcePos.getX(), sourcePos.getY());
       index = 1;
       for (int i = maxRowColumn; i >= 0; i--) {
          // Left Up position

@@ -32,20 +32,20 @@ public class Rock extends Piece {
       // Binary mask representation for the available rock movements from sourcePos
       BitSet movmentMask = new BitSet(chessBoard.getNumRows() * chessBoard.getNumColums());
 
-      // Movements over X coordinate (rows)
-      for (int row = 0; row < chessBoard.getNumRows(); row++) {
-         Position rowPosition = new Position(row, sourcePos.getColumn());
-         movmentMask.set(rowPosition.getRow() + chessBoard.getNumColums() * rowPosition.getColumn());
+      // Movements over X coordinate
+      for (int x = 0; x < chessBoard.getNumColums(); x++) {
+         Position rowPosition = new Position(x, sourcePos.getY());
+         movmentMask.set(rowPosition.getX() + chessBoard.getNumColums() * rowPosition.getY());
 
       }
-      // Movements over Y coordinate (columns)
-      for (int column = 0; column < chessBoard.getNumColums(); column++) {
-         Position rowPosition = new Position(sourcePos.getRow(), column);
-         movmentMask.set(rowPosition.getRow() + chessBoard.getNumColums() * rowPosition.getColumn());
+      // Movements over Y coordinate
+      for (int y = 0; y < chessBoard.getNumRows(); y++) {
+         Position rowPosition = new Position(sourcePos.getX(), y);
+         movmentMask.set(rowPosition.getX() + chessBoard.getNumColums() * rowPosition.getY());
       }
 
       // Exclude the source position
-      movmentMask.clear(sourcePos.getRow() + chessBoard.getNumColums() * sourcePos.getColumn());
+      movmentMask.clear(sourcePos.getX() + chessBoard.getNumColums() * sourcePos.getY());
       return movmentMask;
    }
 }

@@ -50,7 +50,7 @@ public class ChessBoard implements Cloneable {
       this.positionOccupiedSet = new HashSet<>();
       for (int row = 0; row < numRows; row++) {
          for (int column = 0; column < numColums; column++) {
-            Position position = new Position(row, column);
+            Position position = new Position(column, row);
             positionList.add(position);
             this.gridBoard[row][column] = new Cell(position);
          }
@@ -91,7 +91,7 @@ public class ChessBoard implements Cloneable {
     * @return <tt>Cell</tt> corresponding to the <tt>Position</tt> passed by parameter.
     */
    public final Cell getCell(Position position) {
-      return gridBoard[position.getRow()][position.getColumn()];
+      return gridBoard[position.getY()][position.getX()];
    }
 
    /**
@@ -189,27 +189,32 @@ public class ChessBoard implements Cloneable {
     * @param piece    Chess piece
     * @param position Position on the chess board
     * @return <tt>true</tt> if <tt>position</tt> can be attacked for any piece placed on the chess board.
+    * @throws InvalidPositionException
     */
-   public boolean canBePlacedNonAttack(Piece piece, Position position) {
+   public boolean canBePlacedNonAttack(Piece piece, Position position) throws InvalidPositionException {
       if (positionOccupiedSet.isEmpty()) return true;
 
-      // Check piece is not attacked
-      for (Position positionOccupied : positionOccupiedSet) {
-         Piece otherPiece = getCell(positionOccupied).getPiece();
-         int positionMask = position.getRow() + getNumColums() * position.getColumn();
+      try {
+         // Check piece is not attacked
+         for (Position positionOccupied : positionOccupiedSet) {
+            Piece otherPiece = getCell(positionOccupied).getPiece();
+            int positionMask = position.getX() + getNumColums() * position.getY();
 
-         // Test if the bit of the position 'posMask' is marked.
-         if (movementsCache.get(positionOccupied).get(otherPiece.getPieceType()).get(positionMask)) {
-            return false;
+            // Test if the bit of the position 'posMask' is marked.
+            if (movementsCache.get(positionOccupied).get(otherPiece.getPieceType()).get(positionMask)) {
+               return false;
+            }
          }
-      }
 
-      // Check that piece no attack other pieces
-      for (Position positionOccupied : positionOccupiedSet) {
-         int positionOccupiedMask = positionOccupied.getRow() + getNumColums() * positionOccupied.getColumn();
-         if (movementsCache.get(position).get(piece.getPieceType()).get(positionOccupiedMask)) {
-            return false;
+         // Check that piece no attack other pieces
+         for (Position positionOccupied : positionOccupiedSet) {
+            int positionOccupiedMask = positionOccupied.getX() + getNumColums() * positionOccupied.getY();
+            if (movementsCache.get(position).get(piece.getPieceType()).get(positionOccupiedMask)) {
+               return false;
+            }
          }
+      } catch (Exception ex) {
+         throw new InvalidPositionException();
       }
       return true;
    }
@@ -241,13 +246,7 @@ public class ChessBoard implements Cloneable {
       copy.numColums = numColums;
 
       // Copy gridBoard
-      Cell[][] gridBoardCopy = new Cell[numRows][numColums];
-      for (int row = 0; row < numRows; row++) {
-         for (int column = 0; column < numColums; column++) {
-            gridBoardCopy[row][column] = (Cell) this.gridBoard[row][column].clone();
-         }
-      }
-      copy.gridBoard = gridBoardCopy;
+      copy.gridBoard = this.gridBoardCopyOf();
 
       // Copy positionList
       List<Position> positionListCopy = new ArrayList<>();
@@ -279,7 +278,22 @@ public class ChessBoard implements Cloneable {
    }
 
    /**
-    * String represetnation of the chess board.<br/>
+    * Returns a slim copy (only numRows, numColumns and gridBoard) of the <tt>ChessBoard</tt>.
+    *
+    * @return slim copy (only numRows, numColumns and gridBoard)
+    * @throws CloneNotSupportedException Clone Cell error
+    */
+   public ChessBoard slimCopyOf() throws CloneNotSupportedException {
+      ChessBoard copy = new ChessBoard();
+      copy.numRows = numRows;
+      copy.numColums = numColums;
+
+      copy.gridBoard = this.gridBoardCopyOf();
+      return copy;
+   }
+
+   /**
+    * String representation of the chess board.<br/>
     * <pre>
     * Example:
     * * Q * * *
@@ -293,7 +307,8 @@ public class ChessBoard implements Cloneable {
    @Override
    public String toString() {
       StringBuilder chessBoardString = new StringBuilder();
-      for (Cell[] cellArray : gridBoard) {
+      for (int i = gridBoard.length - 1; i >= 0; i--) {
+         Cell[] cellArray = gridBoard[i];
          for (Cell cell : cellArray) {
             Piece piece = cell.getPiece();
             chessBoardString.append((piece == null) ? "*" : piece.getPieceType().getShortName());
@@ -302,6 +317,24 @@ public class ChessBoard implements Cloneable {
          chessBoardString.append("\n");
       }
       return chessBoardString.toString();
+   }
+
+   /**
+    * Generates a unique key for the representation of the <tt>ChessBoard</tt>.<br/>
+    * Format: ****Q**B***
+    *
+    * @return <tt>ChessBoard</tt> key
+    */
+   public String createChessBoardKey(ChessBoard chessBoard) {
+      StringBuilder chessBoardKey = new StringBuilder();
+      for (int i = chessBoard.gridBoard.length - 1; i >= 0; i--) {
+         Cell[] cellArray = chessBoard.gridBoard[i];
+         for (Cell cell : cellArray) {
+            Piece piece = cell.getPiece();
+            chessBoardKey.append((piece == null) ? "*" : piece.getPieceType().getShortName());
+         }
+      }
+      return chessBoardKey.toString();
    }
 
 // -- Private methods
@@ -329,19 +362,18 @@ public class ChessBoard implements Cloneable {
    }
 
    /**
-    * Generates a unique key for the representation of the <tt>ChessBoard</tt>.<br/>
-    * Format: ****Q**B***
+    * Returns a deep copy of <tt>gridBoard</tt>
     *
-    * @return <tt>ChessBoard</tt> key
+    * @return Deep copy of <tt></tt>
+    * @throws CloneNotSupportedException Cell clone error
     */
-   private String createChessBoardKey(ChessBoard chessBoard) {
-      StringBuilder chessBoardKey = new StringBuilder();
-      for (Cell[] cellArray : chessBoard.gridBoard) {
-         for (Cell cell : cellArray) {
-            Piece piece = cell.getPiece();
-            chessBoardKey.append((piece == null) ? "*" : piece.getPieceType().getShortName());
+   private Cell[][] gridBoardCopyOf() throws CloneNotSupportedException {
+      Cell[][] gridBoardCopy = new Cell[numRows][numColums];
+      for (int row = 0; row < numRows; row++) {
+         for (int column = 0; column < numColums; column++) {
+            gridBoardCopy[row][column] = (Cell) this.gridBoard[row][column].clone();
          }
       }
-      return chessBoardKey.toString();
+      return gridBoardCopy;
    }
 }
