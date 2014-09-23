@@ -21,3 +21,6 @@ NOTES:
 - Compiled with jdk 1.8
 - Now there is only one implementation with backtracking algorithm (BacktrackChessPuzzleSolverService). Performance
 is VERY POOR. TODO Make a better implementation of ChessPuzzleSolverService using heuristics
+
+TEST CASE:
+total number of unique configurations for a 7×7 board with 2 Kings, 2 Queens, 2 Bishops and 1 Knight: 3063828 solutions
