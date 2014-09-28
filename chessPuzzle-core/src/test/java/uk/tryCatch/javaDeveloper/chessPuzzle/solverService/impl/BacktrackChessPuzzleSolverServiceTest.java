@@ -3,6 +3,8 @@ package uk.tryCatch.javaDeveloper.chessPuzzle.solverService.impl;
 import junit.framework.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
+import uk.tryCatch.javaDeveloper.chessPuzzle.Performance;
 import uk.tryCatch.javaDeveloper.chessPuzzle.board.ChessBoard;
 import uk.tryCatch.javaDeveloper.chessPuzzle.solverService.ChessPuzzleSolution;
 import uk.tryCatch.javaDeveloper.chessPuzzle.solverService.PieceConfiguration;
@@ -235,5 +237,38 @@ public class BacktrackChessPuzzleSolverServiceTest {
       Assert.assertFalse(solution.hasError());
       Assert.assertTrue(solution.hasSolution());
       Assert.assertEquals(48, solution.totalSolutions());
+   }
+
+   /**
+    * Test method <tt>solve</tt> for imputs:
+    * <ul>
+    * <li>6X6 board</li>
+    * <li>1 Queens</li>
+    * <li>1 Bishop</li>
+    * <li>1 Knight</li>
+    * <li>1 King</li>
+    * </ul>
+    * Output: 54208 solutions
+    *
+    * @throws Exception Test errors
+    */
+   @Category(Performance.class)
+   @Test(timeout = 7500)
+   public void testSolve_6x6_1Q_1_B_1L_1K_4_54208Solutions() throws Exception {
+      // Piece configuraiton input
+      PieceConfiguration pieceConfiguration = new PieceConfiguration();
+      pieceConfiguration.addPieces(QUEEN, 1);
+      pieceConfiguration.addPieces(BISHOP, 1);
+      pieceConfiguration.addPieces(KNIGHT, 1);
+      pieceConfiguration.addPieces(KING, 1);
+
+      // Try to solve
+      ChessPuzzleSolution solution = solverService.solve(6, 6, pieceConfiguration);
+
+      // Assertion available solutions
+      Assert.assertNotNull(solution);
+      Assert.assertFalse(solution.hasError());
+      Assert.assertTrue(solution.hasSolution());
+      Assert.assertEquals(54208, solution.totalSolutions());
    }
 }
