@@ -132,7 +132,7 @@ public class BacktrackChessPuzzleSolverService implements ChessPuzzleSolverServi
 
          Piece piece = pieceList.get(numPiece);
          // Piece can be placed is cell is empty and cannot be attacked from any other piece on the board
-         if (chessBoard.isEmpty(position) && chessBoard.canBePlacedNonAttack(piece, position)) {
+         if (chessBoard.canBePlacedNonAttack(piece, position)) {
             // Place piece on the chess board
             chessBoard.addPiece(position, piece);
 

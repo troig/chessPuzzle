@@ -26,8 +26,10 @@ public class ChessBoard implements Cloneable {
    private Cell[][] gridBoard;
    /** List of all positions of the chess borad */
    private List<Position> positionList;
-   /** Set that contains all positions of the chess board occupied (containing a piece) */
-   private Set<Position> positionOccupiedSet;
+   /** Binary mark that contains all positions of the chess board occupied (containing a piece) */
+   private BitSet positionOccupiedMask;
+   /** Array with a int value for each position of the chessBoard with the number of pieces that attack this position */
+   private int[] numAttacksByPosArray;
    /** Cache with a binary mask representation of all available movement for each piece for each position */
    private Map<Position, Map<PieceType, BitSet>> movementsCache = new HashMap<>();
 
@@ -47,7 +49,9 @@ public class ChessBoard implements Cloneable {
       // Grid of chessBoard initalization
       this.gridBoard = new Cell[numRows][numColums];
       this.positionList = new ArrayList<>();
-      this.positionOccupiedSet = new HashSet<>();
+      int numPositions = numRows * numColums;
+      this.positionOccupiedMask = new BitSet(numPositions);
+      this.numAttacksByPosArray = new int[numPositions];
       for (int row = 0; row < numRows; row++) {
          for (int column = 0; column < numColums; column++) {
             Position position = new Position(column, row);
@@ -102,12 +106,20 @@ public class ChessBoard implements Cloneable {
     * @param piece    Chess piece to place
     * @throws InvalidPositionException When invalid position
     */
-   public void addPiece(Position position, Piece piece) throws InvalidPositionException {
+   public void addPiece(Position position, Piece piece) throws ChessException {
       try {
+         Cell cell = getCell(position);
+         if (!cell.isEmpty()) throw new ChessException("Position already occupied");
+
          // Add piece to the cell
-         getCell(position).addPiece(piece);
-         // Mark position as occupied
-         positionOccupiedSet.add(position);
+         cell.addPiece(piece);
+         // Update mask positions occupied
+         positionOccupiedMask.set(getLinealIndex(position));
+         // Increment number of attacks of all positions attacked result of placing this piece on this position
+         updatePositionsAttacked(position, piece, true);
+
+      } catch (ChessException chessEx) {
+         throw chessEx;
       } catch (Exception ex) {
          throw new InvalidPositionException();
       }
@@ -121,10 +133,15 @@ public class ChessBoard implements Cloneable {
     */
    public void removePiece(Position position) throws InvalidPositionException {
       try {
-         // Remove the pice from the cell
-         getCell(position).removePiece();
-         // Unmark position as occupied
-         positionOccupiedSet.remove(position);
+         Cell cell = getCell(position);
+         if (!cell.isEmpty()) {
+            // Update mask positions occupied
+            positionOccupiedMask.set(getLinealIndex(position), false);
+            // Decrement number of attacks of all positions attacked result of placing this piece on this position
+            updatePositionsAttacked(position, cell.getPiece(), false);
+            // Remove the pice from the cell
+            cell.removePiece();
+         }
       } catch (Exception ex) {
          throw new InvalidPositionException();
       }
@@ -159,8 +176,10 @@ public class ChessBoard implements Cloneable {
     * Remove all chess pieces placed on the <tt>ChessBoard</tt>
     */
    public void removeAllPieces() {
-      // Clear set occupied position
-      positionOccupiedSet.clear();
+      // Clear binary mask with occupied positions
+      positionOccupiedMask.clear();
+      // Reset array with number of pieces that attack each position
+      numAttacksByPosArray = new int[numRows * numColums];
       // Remove all pieces of all occupied cells
       for (Cell[] cellArray : gridBoard) {
          for (Cell cell : cellArray) {
@@ -192,31 +211,14 @@ public class ChessBoard implements Cloneable {
     * @throws InvalidPositionException
     */
    public boolean canBePlacedNonAttack(Piece piece, Position position) throws InvalidPositionException {
-      if (positionOccupiedSet.isEmpty()) return true;
+      // False if position is already occupied
+      if (!isEmpty(position)) return false;
+      // True if there are no pieces placed on the chessBoard
+      if (positionOccupiedMask.isEmpty()) return true;
 
-      try {
-         // Check piece is not attacked
-         for (Position positionOccupied : positionOccupiedSet) {
-            Piece otherPiece = getCell(positionOccupied).getPiece();
-            int positionMask = position.getX() + getNumColums() * position.getY();
-
-            // Test if the bit of the position 'posMask' is marked.
-            if (movementsCache.get(positionOccupied).get(otherPiece.getPieceType()).get(positionMask)) {
-               return false;
-            }
-         }
-
-         // Check that piece no attack other pieces
-         for (Position positionOccupied : positionOccupiedSet) {
-            int positionOccupiedMask = positionOccupied.getX() + getNumColums() * positionOccupied.getY();
-            if (movementsCache.get(position).get(piece.getPieceType()).get(positionOccupiedMask)) {
-               return false;
-            }
-         }
-      } catch (Exception ex) {
-         throw new InvalidPositionException();
-      }
-      return true;
+      // Check position 'safe' and piece no attacks other pieces
+      return (numAttacksByPosArray[getLinealIndex(position)] == 0) &&
+             (!positionOccupiedMask.intersects(movementsCache.get(position).get(piece.getPieceType())));
    }
 
    @SuppressWarnings("RedundantIfStatement")
@@ -256,11 +258,10 @@ public class ChessBoard implements Cloneable {
       copy.positionList = positionListCopy;
 
       // Copy positionOccupiedSet
-      Set<Position> positionOccupiedSetCopy = new HashSet<>();
-      for (Position position : this.positionOccupiedSet) {
-         positionOccupiedSetCopy.add((Position) position.clone());
-      }
-      copy.positionOccupiedSet = positionOccupiedSetCopy;
+      copy.positionOccupiedMask = (BitSet) positionOccupiedMask.clone();
+
+      // Copy array with the number of pieces that attack each position
+      copy.numAttacksByPosArray = Arrays.copyOf(numAttacksByPosArray, numAttacksByPosArray.length);
 
       // Copy movements cache
       Map<Position, Map<PieceType, BitSet>> movementsCacheCopy = new Hashtable<>();
@@ -375,5 +376,38 @@ public class ChessBoard implements Cloneable {
          }
       }
       return gridBoardCopy;
+   }
+
+   /**
+    * Update <tt>numAttacksByPosArray</tt>, where we save the number of pieces that are attacking the <tt>position</tt>
+    * passed by param.
+    *
+    * @param position  Position on the chess board
+    * @param piece     Chess piece
+    * @param addAttack <tt>true</tt> for increment an attack, <tt>false</tt> for decrement
+    */
+   private void updatePositionsAttacked(Position position, Piece piece, boolean addAttack) {
+      BitSet pieceMovements = movementsCache.get(position).get(piece.getPieceType());
+      for (int i = 0; i < pieceMovements.length(); i++) {
+         if (pieceMovements.get(i)) {
+            if (addAttack) {
+               // Increment the number pieces that are attacking this position
+               numAttacksByPosArray[i]++;
+            } else {
+               // Decrement the number pieces that are attacking this position
+               numAttacksByPosArray[i]--;
+            }
+         }
+      }
+   }
+
+   /**
+    * Returns the index of the <tt>position</tt> for a simple array representations of the chess board.
+    *
+    * @param position Position on the chess board
+    * @return <tt>index</tt> position
+    */
+   private int getLinealIndex(Position position) {
+      return position.getX() + getNumColums() * position.getY();
    }
 }
