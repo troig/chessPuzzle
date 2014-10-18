@@ -1,13 +1,13 @@
-package uk.tryCatch.javaDeveloper.chessPuzzle.solverService.impl;
+package uk.tryCatch.javaDeveloper.chessPuzzle.solverservice.impl;
 
 import com.google.common.collect.Collections2;
 import uk.tryCatch.javaDeveloper.chessPuzzle.board.ChessBoard;
 import uk.tryCatch.javaDeveloper.chessPuzzle.board.Position;
 import uk.tryCatch.javaDeveloper.chessPuzzle.exception.ChessException;
 import uk.tryCatch.javaDeveloper.chessPuzzle.piece.Piece;
-import uk.tryCatch.javaDeveloper.chessPuzzle.solverService.ChessPuzzleSolution;
-import uk.tryCatch.javaDeveloper.chessPuzzle.solverService.ChessPuzzleSolverService;
-import uk.tryCatch.javaDeveloper.chessPuzzle.solverService.PieceConfiguration;
+import uk.tryCatch.javaDeveloper.chessPuzzle.solverservice.ChessPuzzleSolution;
+import uk.tryCatch.javaDeveloper.chessPuzzle.solverservice.ChessPuzzleSolverService;
+import uk.tryCatch.javaDeveloper.chessPuzzle.solverservice.PieceConfiguration;
 
 import java.util.List;
 import java.util.Stack;

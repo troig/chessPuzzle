@@ -1,4 +1,4 @@
-package uk.tryCatch.javaDeveloper.chessPuzzle.solverService.impl;
+package uk.tryCatch.javaDeveloper.chessPuzzle.solverservice.impl;
 
 import junit.framework.Assert;
 import org.junit.BeforeClass;
@@ -6,8 +6,8 @@ import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import uk.tryCatch.javaDeveloper.chessPuzzle.Performance;
 import uk.tryCatch.javaDeveloper.chessPuzzle.board.ChessBoard;
-import uk.tryCatch.javaDeveloper.chessPuzzle.solverService.ChessPuzzleSolution;
-import uk.tryCatch.javaDeveloper.chessPuzzle.solverService.PieceConfiguration;
+import uk.tryCatch.javaDeveloper.chessPuzzle.solverservice.ChessPuzzleSolution;
+import uk.tryCatch.javaDeveloper.chessPuzzle.solverservice.PieceConfiguration;
 
 import java.util.HashSet;
 import java.util.Set;

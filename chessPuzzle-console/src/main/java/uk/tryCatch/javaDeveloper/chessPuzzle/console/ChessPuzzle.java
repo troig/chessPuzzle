@@ -1,10 +1,10 @@
 package uk.tryCatch.javaDeveloper.chessPuzzle.console;
 
 import uk.tryCatch.javaDeveloper.chessPuzzle.board.ChessBoard;
-import uk.tryCatch.javaDeveloper.chessPuzzle.solverService.ChessPuzzleSolution;
-import uk.tryCatch.javaDeveloper.chessPuzzle.solverService.ChessPuzzleSolverService;
-import uk.tryCatch.javaDeveloper.chessPuzzle.solverService.PieceConfiguration;
-import uk.tryCatch.javaDeveloper.chessPuzzle.solverService.impl.BacktrackChessPuzzleSolverService;
+import uk.tryCatch.javaDeveloper.chessPuzzle.solverservice.ChessPuzzleSolution;
+import uk.tryCatch.javaDeveloper.chessPuzzle.solverservice.ChessPuzzleSolverService;
+import uk.tryCatch.javaDeveloper.chessPuzzle.solverservice.PieceConfiguration;
+import uk.tryCatch.javaDeveloper.chessPuzzle.solverservice.impl.BacktrackChessPuzzleSolverService;
 
 import java.util.Scanner;
 

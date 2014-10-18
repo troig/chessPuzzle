@@ -1,4 +1,4 @@
-package uk.tryCatch.javaDeveloper.chessPuzzle.solverService;
+package uk.tryCatch.javaDeveloper.chessPuzzle.solverservice;
 
 import uk.tryCatch.javaDeveloper.chessPuzzle.exception.InvalidPieceException;
 import uk.tryCatch.javaDeveloper.chessPuzzle.piece.Piece;
