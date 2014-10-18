@@ -1,11 +1,10 @@
 package uk.tryCatch.javaDeveloper.chessPuzzle.console;
 
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 import uk.tryCatch.javaDeveloper.chessPuzzle.board.ChessBoard;
 import uk.tryCatch.javaDeveloper.chessPuzzle.solverService.ChessPuzzleSolution;
 import uk.tryCatch.javaDeveloper.chessPuzzle.solverService.ChessPuzzleSolverService;
 import uk.tryCatch.javaDeveloper.chessPuzzle.solverService.PieceConfiguration;
+import uk.tryCatch.javaDeveloper.chessPuzzle.solverService.impl.BacktrackChessPuzzleSolverService;
 
 import java.util.Scanner;
 
@@ -25,9 +24,6 @@ public class ChessPuzzle {
    /** Launch the app */
    @SuppressWarnings("ThrowableResultOfMethodCallIgnored")
    public static void main(String[] args) throws Exception {
-      // Init spring context
-      ApplicationContext context = new ClassPathXmlApplicationContext("application-context.xml");
-
       // Inputs passed by command line
       Scanner scanner = new Scanner(System.in);
 
@@ -53,7 +49,7 @@ public class ChessPuzzle {
       pieceConfiguration.addPieces(KING, numKing);
 
       // Try to solve the puzzle
-      ChessPuzzleSolverService solverService = context.getBean(ChessPuzzleSolverService.class);
+      ChessPuzzleSolverService solverService = new BacktrackChessPuzzleSolverService();
       ChessPuzzleSolution solution = solverService.solve(numRowsBoard, numColumnsBoard, pieceConfiguration);
 
       // Output available solutions

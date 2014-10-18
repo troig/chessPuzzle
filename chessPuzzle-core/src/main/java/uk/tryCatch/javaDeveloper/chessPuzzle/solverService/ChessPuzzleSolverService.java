@@ -1,6 +1,5 @@
 package uk.tryCatch.javaDeveloper.chessPuzzle.solverService;
 
-import org.springframework.stereotype.Service;
 import uk.tryCatch.javaDeveloper.chessPuzzle.exception.ChessException;
 
 /**
@@ -14,7 +13,6 @@ import uk.tryCatch.javaDeveloper.chessPuzzle.exception.ChessException;
  *
  * @author troig
  */
-@Service("chessPuzzleSolver")
 public interface ChessPuzzleSolverService {
 
    /**
