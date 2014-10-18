@@ -1,12 +1,12 @@
-package uk.tryCatch.javaDeveloper.chessPuzzle.board;
+package uk.trycatch.javadeveloper.chesspuzzle.board;
 
 import junit.framework.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import uk.tryCatch.javaDeveloper.chessPuzzle.exception.InvalidPositionException;
+import uk.trycatch.javadeveloper.chesspuzzle.exception.InvalidPositionException;
 
-import static uk.tryCatch.javaDeveloper.chessPuzzle.piece.PieceFactory.createPiece;
-import static uk.tryCatch.javaDeveloper.chessPuzzle.piece.PieceType.*;
+import static uk.trycatch.javadeveloper.chesspuzzle.piece.PieceFactory.createPiece;
+import static uk.trycatch.javadeveloper.chesspuzzle.piece.PieceType.*;
 
 /**
  * Test for class <tt>ChessBoard</tt>

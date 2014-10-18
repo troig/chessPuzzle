@@ -1,4 +1,4 @@
-package uk.tryCatch.javaDeveloper.chessPuzzle.piece;
+package uk.trycatch.javadeveloper.chesspuzzle.piece;
 
 /**
  * Enumeration that defines the different valid types of chess <tt>Piece</tt>

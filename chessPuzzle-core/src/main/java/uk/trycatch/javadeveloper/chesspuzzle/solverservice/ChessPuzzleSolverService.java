@@ -1,6 +1,6 @@
-package uk.tryCatch.javaDeveloper.chessPuzzle.solverservice;
+package uk.trycatch.javadeveloper.chesspuzzle.solverservice;
 
-import uk.tryCatch.javaDeveloper.chessPuzzle.exception.ChessException;
+import uk.trycatch.javadeveloper.chesspuzzle.exception.ChessException;
 
 /**
  * Service for puzzle solver.<br/>

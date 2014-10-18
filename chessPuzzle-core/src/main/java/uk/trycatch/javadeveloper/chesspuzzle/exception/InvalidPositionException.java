@@ -1,4 +1,4 @@
-package uk.tryCatch.javaDeveloper.chessPuzzle.exception;
+package uk.trycatch.javadeveloper.chesspuzzle.exception;
 
 /**
  * Exception for scenarios with invalid position errors.

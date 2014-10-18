@@ -1,13 +1,13 @@
-package uk.tryCatch.javaDeveloper.chessPuzzle.piece;
+package uk.trycatch.javadeveloper.chesspuzzle.piece;
 
 import junit.framework.Assert;
 import org.junit.Test;
-import uk.tryCatch.javaDeveloper.chessPuzzle.board.ChessBoard;
-import uk.tryCatch.javaDeveloper.chessPuzzle.board.Position;
+import uk.trycatch.javadeveloper.chesspuzzle.board.ChessBoard;
+import uk.trycatch.javadeveloper.chesspuzzle.board.Position;
 
 import java.util.BitSet;
 
-import static uk.tryCatch.javaDeveloper.chessPuzzle.piece.PieceType.QUEEN;
+import static uk.trycatch.javadeveloper.chesspuzzle.piece.PieceType.QUEEN;
 
 /**
  * Test for class <tt>Queen</tt>

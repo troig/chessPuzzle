@@ -1,4 +1,4 @@
-package uk.tryCatch.javaDeveloper.chessPuzzle;
+package uk.trycatch.javadeveloper.chesspuzzle;
 
 /**
  * Annotation for category test Performance

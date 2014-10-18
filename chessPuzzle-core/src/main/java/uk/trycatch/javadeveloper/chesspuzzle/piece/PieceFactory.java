@@ -1,6 +1,6 @@
-package uk.tryCatch.javaDeveloper.chessPuzzle.piece;
+package uk.trycatch.javadeveloper.chesspuzzle.piece;
 
-import uk.tryCatch.javaDeveloper.chessPuzzle.exception.InvalidPieceException;
+import uk.trycatch.javadeveloper.chesspuzzle.exception.InvalidPieceException;
 
 /**
  * Factory of chess pieces from PieceType

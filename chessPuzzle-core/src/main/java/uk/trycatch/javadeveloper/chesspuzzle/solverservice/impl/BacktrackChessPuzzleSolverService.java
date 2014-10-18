@@ -1,13 +1,13 @@
-package uk.tryCatch.javaDeveloper.chessPuzzle.solverservice.impl;
+package uk.trycatch.javadeveloper.chesspuzzle.solverservice.impl;
 
 import com.google.common.collect.Collections2;
-import uk.tryCatch.javaDeveloper.chessPuzzle.board.ChessBoard;
-import uk.tryCatch.javaDeveloper.chessPuzzle.board.Position;
-import uk.tryCatch.javaDeveloper.chessPuzzle.exception.ChessException;
-import uk.tryCatch.javaDeveloper.chessPuzzle.piece.Piece;
-import uk.tryCatch.javaDeveloper.chessPuzzle.solverservice.ChessPuzzleSolution;
-import uk.tryCatch.javaDeveloper.chessPuzzle.solverservice.ChessPuzzleSolverService;
-import uk.tryCatch.javaDeveloper.chessPuzzle.solverservice.PieceConfiguration;
+import uk.trycatch.javadeveloper.chesspuzzle.board.ChessBoard;
+import uk.trycatch.javadeveloper.chesspuzzle.board.Position;
+import uk.trycatch.javadeveloper.chesspuzzle.exception.ChessException;
+import uk.trycatch.javadeveloper.chesspuzzle.piece.Piece;
+import uk.trycatch.javadeveloper.chesspuzzle.solverservice.ChessPuzzleSolution;
+import uk.trycatch.javadeveloper.chesspuzzle.solverservice.ChessPuzzleSolverService;
+import uk.trycatch.javadeveloper.chesspuzzle.solverservice.PieceConfiguration;
 
 import java.util.List;
 import java.util.Stack;
@@ -19,7 +19,7 @@ import java.util.Stack;
  */
 public class BacktrackChessPuzzleSolverService implements ChessPuzzleSolverService {
 
-   /** Number threads used to find all posible solutions */
+   /** Number threads used to find all possible solutions */
    private static final int numThreadsProcess = 10;
 
 // -- Methods inherited from interface ChessPuzzleSolverService
@@ -34,8 +34,8 @@ public class BacktrackChessPuzzleSolverService implements ChessPuzzleSolverServi
     * @param numRowsBoard       Number of rows of the chess board
     * @param numColumsBoard     Number of columns of the chess board
     * @param pieceConfiguration Piece configuration for the puzzle (X pieces each certain piece type)
-    * @return Solution for the puzzle (N chessBoard solved, timeProces...)
-    * @throws ChessException Solver errros
+    * @return Solution for the puzzle (N chessBoard solved, timeProcess...)
+    * @throws ChessException Solver erros
     */
    @Override
    public ChessPuzzleSolution solve(int numRowsBoard, int numColumsBoard,
@@ -53,7 +53,7 @@ public class BacktrackChessPuzzleSolverService implements ChessPuzzleSolverServi
 
          List<Piece> pieceList = pieceConfiguration.getPieceList();
 
-         // Create a stack with all posible piece configuration. (Ex: QBR -> QBR, QRB, BQR, BRQ, RQB, RBQ)
+         // Create a stack with all possible piece configuration. (Ex: QBR -> QBR, QRB, BQR, BRQ, RQB, RBQ)
          /** TODO (troig 21/09/2014): Very poor performance solution. Don't use all combinations, only which are really needed. */
          /** TODO (troig 21/09/2014): Make heuristics to determine best cell to try to place every piece. */
          Stack<List<Piece>> pieceListCombinationStack = new Stack<>();
@@ -81,7 +81,7 @@ public class BacktrackChessPuzzleSolverService implements ChessPuzzleSolverServi
          solution.setError(new ChessException("Error trying to solve the puzzle: " + e.getMessage()));
       }
 
-      // Finally, set the time to proces
+      // Finally, set the time to process
       solution.setTimeProcess(System.currentTimeMillis() - initProcess);
 
       return solution;
@@ -98,7 +98,7 @@ public class BacktrackChessPuzzleSolverService implements ChessPuzzleSolverServi
     * @param posIndex     Index to the position checked
     * @param pieceList    List of pieces to place on the chess board
     * @param pieceToPlace How many pieces are not yet placed
-    * @param solution     solution colector
+    * @param solution     solution collector
     * @return <tt>true</tt> if chess board is solved
     * @throws Exception Can throw runtime errors
     */
@@ -115,13 +115,13 @@ public class BacktrackChessPuzzleSolverService implements ChessPuzzleSolverServi
             solution.addChessBoard(chessBoardSolved);
          }
 
-         // All positions of the board are checkd -> Return
+         // All positions of the board are checked -> Return
          if (posIndex == allPosition.size()) {
             return true;
          }
       }
 
-      // Iterate over all positions of the board. Place a piece if it's posible, backtracking if piece will be attacked
+      // Iterate over all positions of the board. Place a piece if it's possible, backtracking if piece will be attacked
       // at this position
       for (int i = posIndex; i < allPosition.size(); i++) {
          Position position = allPosition.get(i);
@@ -186,7 +186,7 @@ public class BacktrackChessPuzzleSolverService implements ChessPuzzleSolverServi
                }
                if (pieceList != null) {
                   solve(chessBoard,       // Chess board to solve
-                        0,                // Index to the position to start to chech a solution
+                        0,                // Index to the position to start to check a solution
                         pieceList,        // List of pieces to place on the chess board
                         pieceList.size(), // Number total of pieces to place on the chess board
                         solution);        // Solution collector

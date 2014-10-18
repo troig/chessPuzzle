@@ -1,6 +1,6 @@
-package uk.tryCatch.javaDeveloper.chessPuzzle.board;
+package uk.trycatch.javadeveloper.chesspuzzle.board;
 
-import uk.tryCatch.javaDeveloper.chessPuzzle.piece.Piece;
+import uk.trycatch.javadeveloper.chesspuzzle.piece.Piece;
 
 /**
  * Definition of one <tt>Cell</tt> of a chess board.

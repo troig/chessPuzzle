@@ -1,7 +1,7 @@
-package uk.tryCatch.javaDeveloper.chessPuzzle.solverservice;
+package uk.trycatch.javadeveloper.chesspuzzle.solverservice;
 
-import uk.tryCatch.javaDeveloper.chessPuzzle.board.ChessBoard;
-import uk.tryCatch.javaDeveloper.chessPuzzle.exception.ChessException;
+import uk.trycatch.javadeveloper.chesspuzzle.board.ChessBoard;
+import uk.trycatch.javadeveloper.chesspuzzle.exception.ChessException;
 
 import java.util.LinkedHashSet;
 import java.util.Set;

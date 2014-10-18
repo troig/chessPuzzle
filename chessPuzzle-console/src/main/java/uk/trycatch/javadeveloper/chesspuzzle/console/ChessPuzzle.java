@@ -1,14 +1,14 @@
-package uk.tryCatch.javaDeveloper.chessPuzzle.console;
+package uk.trycatch.javadeveloper.chesspuzzle.console;
 
-import uk.tryCatch.javaDeveloper.chessPuzzle.board.ChessBoard;
-import uk.tryCatch.javaDeveloper.chessPuzzle.solverservice.ChessPuzzleSolution;
-import uk.tryCatch.javaDeveloper.chessPuzzle.solverservice.ChessPuzzleSolverService;
-import uk.tryCatch.javaDeveloper.chessPuzzle.solverservice.PieceConfiguration;
-import uk.tryCatch.javaDeveloper.chessPuzzle.solverservice.impl.BacktrackChessPuzzleSolverService;
+import uk.trycatch.javadeveloper.chesspuzzle.board.ChessBoard;
+import uk.trycatch.javadeveloper.chesspuzzle.solverservice.ChessPuzzleSolution;
+import uk.trycatch.javadeveloper.chesspuzzle.solverservice.ChessPuzzleSolverService;
+import uk.trycatch.javadeveloper.chesspuzzle.solverservice.PieceConfiguration;
+import uk.trycatch.javadeveloper.chesspuzzle.solverservice.impl.BacktrackChessPuzzleSolverService;
 
 import java.util.Scanner;
 
-import static uk.tryCatch.javaDeveloper.chessPuzzle.piece.PieceType.*;
+import static uk.trycatch.javadeveloper.chesspuzzle.piece.PieceType.*;
 
 /**
  * Basic console application to solve the chess puzzle.<br/>

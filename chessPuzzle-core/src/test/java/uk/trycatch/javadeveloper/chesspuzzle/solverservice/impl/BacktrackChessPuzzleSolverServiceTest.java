@@ -1,18 +1,18 @@
-package uk.tryCatch.javaDeveloper.chessPuzzle.solverservice.impl;
+package uk.trycatch.javadeveloper.chesspuzzle.solverservice.impl;
 
 import junit.framework.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
-import uk.tryCatch.javaDeveloper.chessPuzzle.Performance;
-import uk.tryCatch.javaDeveloper.chessPuzzle.board.ChessBoard;
-import uk.tryCatch.javaDeveloper.chessPuzzle.solverservice.ChessPuzzleSolution;
-import uk.tryCatch.javaDeveloper.chessPuzzle.solverservice.PieceConfiguration;
+import uk.trycatch.javadeveloper.chesspuzzle.Performance;
+import uk.trycatch.javadeveloper.chesspuzzle.board.ChessBoard;
+import uk.trycatch.javadeveloper.chesspuzzle.solverservice.ChessPuzzleSolution;
+import uk.trycatch.javadeveloper.chesspuzzle.solverservice.PieceConfiguration;
 
 import java.util.HashSet;
 import java.util.Set;
 
-import static uk.tryCatch.javaDeveloper.chessPuzzle.piece.PieceType.*;
+import static uk.trycatch.javadeveloper.chesspuzzle.piece.PieceType.*;
 
 /**
  * Test class for <tt>BacktrackChessPuzzleSolverService</tt> implementation

@@ -1,11 +1,11 @@
-package uk.tryCatch.javaDeveloper.chessPuzzle.piece;
+package uk.trycatch.javadeveloper.chesspuzzle.piece;
 
-import uk.tryCatch.javaDeveloper.chessPuzzle.board.ChessBoard;
-import uk.tryCatch.javaDeveloper.chessPuzzle.board.Position;
+import uk.trycatch.javadeveloper.chesspuzzle.board.ChessBoard;
+import uk.trycatch.javadeveloper.chesspuzzle.board.Position;
 
 import java.util.BitSet;
 
-import static uk.tryCatch.javaDeveloper.chessPuzzle.piece.PieceType.KNIGHT;
+import static uk.trycatch.javadeveloper.chesspuzzle.piece.PieceType.KNIGHT;
 
 /**
  * Definition of <tt>Knight</tt> chess piece

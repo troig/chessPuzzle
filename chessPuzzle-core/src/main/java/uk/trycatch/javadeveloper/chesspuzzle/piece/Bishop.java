@@ -1,7 +1,7 @@
-package uk.tryCatch.javaDeveloper.chessPuzzle.piece;
+package uk.trycatch.javadeveloper.chesspuzzle.piece;
 
-import uk.tryCatch.javaDeveloper.chessPuzzle.board.ChessBoard;
-import uk.tryCatch.javaDeveloper.chessPuzzle.board.Position;
+import uk.trycatch.javadeveloper.chesspuzzle.board.ChessBoard;
+import uk.trycatch.javadeveloper.chesspuzzle.board.Position;
 
 import java.util.BitSet;
 

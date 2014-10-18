@@ -1,4 +1,4 @@
-package uk.tryCatch.javaDeveloper.chessPuzzle.board;
+package uk.trycatch.javadeveloper.chesspuzzle.board;
 
 /**
  * Specifications of a <tt>Position</tt> (x, y) to access chess board cells.

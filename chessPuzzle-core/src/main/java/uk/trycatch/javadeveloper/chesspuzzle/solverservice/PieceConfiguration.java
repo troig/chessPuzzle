@@ -1,9 +1,9 @@
-package uk.tryCatch.javaDeveloper.chessPuzzle.solverservice;
+package uk.trycatch.javadeveloper.chesspuzzle.solverservice;
 
-import uk.tryCatch.javaDeveloper.chessPuzzle.exception.InvalidPieceException;
-import uk.tryCatch.javaDeveloper.chessPuzzle.piece.Piece;
-import uk.tryCatch.javaDeveloper.chessPuzzle.piece.PieceFactory;
-import uk.tryCatch.javaDeveloper.chessPuzzle.piece.PieceType;
+import uk.trycatch.javadeveloper.chesspuzzle.exception.InvalidPieceException;
+import uk.trycatch.javadeveloper.chesspuzzle.piece.Piece;
+import uk.trycatch.javadeveloper.chesspuzzle.piece.PieceFactory;
+import uk.trycatch.javadeveloper.chesspuzzle.piece.PieceType;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
