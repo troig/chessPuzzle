@@ -30,7 +30,7 @@ public class BacktrackChessPuzzleSolverServiceTest {
    }
 
    /**
-    * Test method <tt>solve</tt> for imputs:
+    * Test method <tt>solve</tt> for inputs:
     * <ul>
     * <li>3x3 board</li>
     * <li>2 King</li>
@@ -42,15 +42,12 @@ public class BacktrackChessPuzzleSolverServiceTest {
     */
    @Test
    public void testSolve_3x3_2K_1R_4Solutions() throws Exception {
-      // Piece configuraiton input
       PieceConfiguration pieceConfiguration = new PieceConfiguration();
       pieceConfiguration.addPieces(KING, 2);
       pieceConfiguration.addPieces(ROCK, 1);
 
-      // Try to solve
       ChessPuzzleSolution solution = solverService.solve(3, 3, pieceConfiguration);
 
-      // Assertion available solutions
       Assert.assertNotNull(solution);
       Assert.assertFalse(solution.hasError());
       Assert.assertTrue(solution.hasSolution());
@@ -66,12 +63,11 @@ public class BacktrackChessPuzzleSolverServiceTest {
       for (ChessBoard chessBoardSolved : chessBoardSolvedSet) {
          setChessBoardKeySolvedExpected.remove(chessBoardSolved.createChessBoardKey(chessBoardSolved));
       }
-      // Check all solution has found
       Assert.assertEquals(0, setChessBoardKeySolvedExpected.size());
    }
 
    /**
-    * Test method <tt>solve</tt> for imputs:
+    * Test method <tt>solve</tt> for inputs:
     * <ul>
     * <li>4x4 board</li>
     * <li>2 Rooks</li>
@@ -83,15 +79,12 @@ public class BacktrackChessPuzzleSolverServiceTest {
     */
    @Test
    public void testSolve_4x4_2R_4L_8Solutions() throws Exception {
-      // Piece configuraiton input
       PieceConfiguration pieceConfiguration = new PieceConfiguration();
       pieceConfiguration.addPieces(ROCK, 2);
       pieceConfiguration.addPieces(KNIGHT, 4);
-
-      // Try to solve
+ 
       ChessPuzzleSolution solution = solverService.solve(4, 4, pieceConfiguration);
 
-      // Assertion available solutions
       Assert.assertNotNull(solution);
       Assert.assertFalse(solution.hasError());
       Assert.assertTrue(solution.hasSolution());
@@ -111,12 +104,11 @@ public class BacktrackChessPuzzleSolverServiceTest {
       for (ChessBoard chessBoardSolved : chessBoardSolvedSet) {
          setChessBoardKeySolvedExpected.remove(chessBoardSolved.createChessBoardKey(chessBoardSolved));
       }
-      // Check all solution has found
       Assert.assertEquals(0, setChessBoardKeySolvedExpected.size());
    }
 
    /**
-    * Test method <tt>solve</tt> for imputs:
+    * Test method <tt>solve</tt> for inputs:
     * <ul>
     * <li>4x4 board</li>
     * <li>4 Queens</li>
@@ -127,14 +119,11 @@ public class BacktrackChessPuzzleSolverServiceTest {
     */
    @Test
    public void testSolve_4x4_4Q_2Solutions() throws Exception {
-      // Piece configuraiton input
       PieceConfiguration pieceConfiguration = new PieceConfiguration();
       pieceConfiguration.addPieces(QUEEN, 4);
 
-      // Try to solve
       ChessPuzzleSolution solution = solverService.solve(4, 4, pieceConfiguration);
 
-      // Assertion available solutions
       Assert.assertNotNull(solution);
       Assert.assertFalse(solution.hasError());
       Assert.assertTrue(solution.hasSolution());
@@ -148,12 +137,11 @@ public class BacktrackChessPuzzleSolverServiceTest {
       for (ChessBoard chessBoardSolved : chessBoardSolvedSet) {
          setChessBoardKeySolvedExpected.remove(chessBoardSolved.createChessBoardKey(chessBoardSolved));
       }
-      // Check all solution has found
       Assert.assertEquals(0, setChessBoardKeySolvedExpected.size());
    }
 
    /**
-    * Test method <tt>solve</tt> for imputs:
+    * Test method <tt>solve</tt> for inputs:
     * <ul>
     * <li>3x4 board</li>
     * <li>2 Queens</li>
@@ -164,14 +152,11 @@ public class BacktrackChessPuzzleSolverServiceTest {
     */
    @Test
    public void testSolve_3x4_2Q_20Solutions() throws Exception {
-      // Piece configuraiton input
       PieceConfiguration pieceConfiguration = new PieceConfiguration();
       pieceConfiguration.addPieces(QUEEN, 2);
 
-      // Try to solve
       ChessPuzzleSolution solution = solverService.solve(3, 4, pieceConfiguration);
 
-      // Assertion available solutions
       Assert.assertNotNull(solution);
       Assert.assertFalse(solution.hasError());
       Assert.assertTrue(solution.hasSolution());
@@ -179,7 +164,7 @@ public class BacktrackChessPuzzleSolverServiceTest {
    }
 
    /**
-    * Test method <tt>solve</tt> for imputs:
+    * Test method <tt>solve</tt> for inputs:
     * <ul>
     * <li>3x3 board</li>
     * <li>1 Queens</li>
@@ -193,24 +178,21 @@ public class BacktrackChessPuzzleSolverServiceTest {
     */
    @Test
    public void testSolve_3x3_1Q_1L_1R_1K_NoSolutions() throws Exception {
-      // Piece configuraiton input
       PieceConfiguration pieceConfiguration = new PieceConfiguration();
       pieceConfiguration.addPieces(QUEEN, 1);
       pieceConfiguration.addPieces(KNIGHT, 1);
       pieceConfiguration.addPieces(ROCK, 1);
       pieceConfiguration.addPieces(KING, 1);
 
-      // Try to solve
       ChessPuzzleSolution solution = solverService.solve(3, 3, pieceConfiguration);
 
-      // Assertion available solutions
       Assert.assertNotNull(solution);
       Assert.assertFalse(solution.hasError());
       Assert.assertFalse(solution.hasSolution());
    }
 
    /**
-    * Test method <tt>solve</tt> for imputs:
+    * Test method <tt>solve</tt> for inputs:
     * <ul>
     * <li>4x4 board</li>
     * <li>1 Queens</li>
@@ -223,16 +205,13 @@ public class BacktrackChessPuzzleSolverServiceTest {
     */
    @Test
    public void testSolve_4x4_1Q_1L_1R_48Solutions() throws Exception {
-      // Piece configuraiton input
       PieceConfiguration pieceConfiguration = new PieceConfiguration();
       pieceConfiguration.addPieces(QUEEN, 1);
       pieceConfiguration.addPieces(KNIGHT, 1);
       pieceConfiguration.addPieces(ROCK, 1);
 
-      // Try to solve
       ChessPuzzleSolution solution = solverService.solve(4, 4, pieceConfiguration);
 
-      // Assertion available solutions
       Assert.assertNotNull(solution);
       Assert.assertFalse(solution.hasError());
       Assert.assertTrue(solution.hasSolution());
@@ -240,7 +219,7 @@ public class BacktrackChessPuzzleSolverServiceTest {
    }
 
    /**
-    * Test method <tt>solve</tt> for imputs:
+    * Test method <tt>solve</tt> for inputs:
     * <ul>
     * <li>6X6 board</li>
     * <li>1 Queens</li>
@@ -255,17 +234,14 @@ public class BacktrackChessPuzzleSolverServiceTest {
    @Category(Performance.class)
    @Test(timeout = 7500)
    public void testSolve_6x6_1Q_1_B_1L_1K_4_54208Solutions() throws Exception {
-      // Piece configuraiton input
       PieceConfiguration pieceConfiguration = new PieceConfiguration();
       pieceConfiguration.addPieces(QUEEN, 1);
       pieceConfiguration.addPieces(BISHOP, 1);
       pieceConfiguration.addPieces(KNIGHT, 1);
       pieceConfiguration.addPieces(KING, 1);
 
-      // Try to solve
       ChessPuzzleSolution solution = solverService.solve(6, 6, pieceConfiguration);
 
-      // Assertion available solutions
       Assert.assertNotNull(solution);
       Assert.assertFalse(solution.hasError());
       Assert.assertTrue(solution.hasSolution());

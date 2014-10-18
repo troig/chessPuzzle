@@ -28,16 +28,13 @@ public class BishopTest {
     */
    @Test
    public void testAvailableMovementsMask_3x3_onPos_1_1() throws Exception {
-      // Initialize chess board and place a bishop
       ChessBoard chessBoard = new ChessBoard(3, 3);
       Piece bishop = PieceFactory.createPiece(BISHOP);
       Position position = new Position(1, 1);
       chessBoard.addPiece(position, bishop);
 
-      // Calculate available movements
       BitSet movements = bishop.availableMovementsMask(chessBoard, position);
 
-      // Assertions
       Assert.assertNotNull(movements);
 
       BitSet movementsExpected = new BitSet(chessBoard.getNumRows() * chessBoard.getNumColums());

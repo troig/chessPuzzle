@@ -28,16 +28,13 @@ public class RockTest {
     */
    @Test
    public void testAvailableMovementsMask_2x4_onPos_1_1() throws Exception {
-      // Initialize chess board and place a rock
       ChessBoard chessBoard = new ChessBoard(2, 4);
       Piece rock = PieceFactory.createPiece(ROCK);
       Position position = new Position(1, 1);
       chessBoard.addPiece(position, rock);
 
-      // Calculate available movements
       BitSet movements = rock.availableMovementsMask(chessBoard, position);
 
-      // Assertions
       Assert.assertNotNull(movements);
 
       BitSet movementsExpected = new BitSet(chessBoard.getNumRows() * chessBoard.getNumColums());

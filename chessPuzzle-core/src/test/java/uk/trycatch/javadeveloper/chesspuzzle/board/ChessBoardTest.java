@@ -1,7 +1,7 @@
 package uk.trycatch.javadeveloper.chesspuzzle.board;
 
 import junit.framework.Assert;
-import org.junit.BeforeClass;
+import org.junit.Before;
 import org.junit.Test;
 import uk.trycatch.javadeveloper.chesspuzzle.exception.InvalidPositionException;
 
@@ -16,7 +16,7 @@ import static uk.trycatch.javadeveloper.chesspuzzle.piece.PieceType.*;
 public class ChessBoardTest {
 
    /** Chess board with some pieces placed to test purpose */
-   private static ChessBoard chessBoard;
+   private ChessBoard chessBoard;
 
    /**
     * Initialize a ChessBoard with this configuration:
@@ -29,8 +29,8 @@ public class ChessBoardTest {
     *
     * @throws Exception
     */
-   @BeforeClass
-   public static void setUp() throws Exception {
+   @Before
+   public void setUp() throws Exception {
       chessBoard = new ChessBoard(4, 5);
       chessBoard.addPiece(new Position(0, 0), createPiece(QUEEN));
       chessBoard.addPiece(new Position(3, 2), createPiece(KNIGHT));

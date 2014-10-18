@@ -1,38 +1,46 @@
 package uk.trycatch.javadeveloper.chesspuzzle.console;
 
 import uk.trycatch.javadeveloper.chesspuzzle.board.ChessBoard;
+import uk.trycatch.javadeveloper.chesspuzzle.console.logger.SimpleFormatter;
 import uk.trycatch.javadeveloper.chesspuzzle.solverservice.ChessPuzzleSolution;
 import uk.trycatch.javadeveloper.chesspuzzle.solverservice.ChessPuzzleSolverService;
 import uk.trycatch.javadeveloper.chesspuzzle.solverservice.PieceConfiguration;
 import uk.trycatch.javadeveloper.chesspuzzle.solverservice.impl.BacktrackChessPuzzleSolverService;
 
 import java.util.Scanner;
+import java.util.logging.ConsoleHandler;
+import java.util.logging.Logger;
 
 import static uk.trycatch.javadeveloper.chesspuzzle.piece.PieceType.*;
 
 /**
  * Basic console application to solve the chess puzzle.<br/>
- * Inputs are passed like console arguments and the posible solutions are shown in plain text mode.
+ * Inputs are passed like console arguments and the possible solutions are shown in plain text mode.
  *
  * @author troig
  */
 public class ChessPuzzle {
 
+   /** Logger */
+   private static final Logger LOGGER = Logger.getLogger(ChessPuzzle.class.getName());
+
 // -- Public methods
 //--------------------------------------------------------------------------------------------------
 
    /** Launch the app */
-   @SuppressWarnings("ThrowableResultOfMethodCallIgnored")
    public static void main(String[] args) throws Exception {
       // Inputs passed by command line
       Scanner scanner = new Scanner(System.in);
+      ConsoleHandler consoleHandler = new ConsoleHandler();
+      consoleHandler.setFormatter(new SimpleFormatter());
+      LOGGER.setUseParentHandlers(false);
+      LOGGER.addHandler(consoleHandler);
 
-      System.out.println("\nWelcome to chess puzzle solver.");
-      System.out.println("Board dimensions (6x6) and number of pieces (6) to place have been limited for performance reasons\n");
+      LOGGER.info("Welcome to chess puzzle solver.\n");
 
       // Board dimensions
-      int numRowsBoard = scanNumber(scanner, "board rows", 2, 6);
-      int numColumnsBoard = scanNumber(scanner, "board columns", 2, 6);
+      int numRowsBoard = scanNumber(scanner, "board rows", 2, 7);
+      int numColumnsBoard = scanNumber(scanner, "board columns", 2, 7);
 
       // Piece configuration
       int numQueens = scanNumber(scanner, "queens", 0, 2);
@@ -48,22 +56,21 @@ public class ChessPuzzle {
       pieceConfiguration.addPieces(KNIGHT, numKnight);
       pieceConfiguration.addPieces(KING, numKing);
 
-      // Try to solve the puzzle
       ChessPuzzleSolverService solverService = new BacktrackChessPuzzleSolverService();
       ChessPuzzleSolution solution = solverService.solve(numRowsBoard, numColumnsBoard, pieceConfiguration);
 
       // Output available solutions
       if (solution.hasError()) {
-         System.out.println(solution.getError().getMessage());
+         LOGGER.info(solution.getError().getMessage());
       } else {
-         System.out.println("\nTotal solutions: " + solution.totalSolutions());
-         System.out.println("Time process   : " + solution.getTimeProcess() + " ms\n");
+         LOGGER.info("\nTotal solutions: " + solution.totalSolutions());
+         LOGGER.info("\nTime process   : " + solution.getTimeProcess() + " ms");
 
          if (solution.hasSolution()) {
             int numSolution = 1;
             for (ChessBoard chessBoard : solution.getChessBoardSet()) {
-               System.out.println("Solution " + numSolution++ + ": ");
-               System.out.println(chessBoard);
+               LOGGER.info("Solution " + numSolution++ + ": \n");
+               LOGGER.info(chessBoard.toString());
             }
          }
       }
@@ -84,9 +91,9 @@ public class ChessPuzzle {
    private static int scanNumber(Scanner scanner, String element, int minimAllowed, int maximAllowed) {
       int numberArg;
       do {
-         System.out.print("Number of " + element + " [" + minimAllowed + ", " + maximAllowed + "]: ");
+         LOGGER.info("Number of " + element + " [" + minimAllowed + ", " + maximAllowed + "]: ");
          while (!scanner.hasNextInt()) {
-            System.out.print("Please, enter a valid number: ");
+            LOGGER.info("Please, enter a valid number: ");
             scanner.next();
          }
          numberArg = scanner.nextInt();
@@ -94,4 +101,6 @@ public class ChessPuzzle {
 
       return numberArg;
    }
+
+
 }

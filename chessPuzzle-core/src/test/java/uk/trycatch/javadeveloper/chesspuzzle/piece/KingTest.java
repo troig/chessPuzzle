@@ -29,16 +29,13 @@ public class KingTest {
     */
    @Test
    public void testAvailableMovementsMask_3x2_onPos_0_1() throws Exception {
-      // Initialize chess board and place a king
       ChessBoard chessBoard = new ChessBoard(3, 2);
       Piece king = PieceFactory.createPiece(KING);
       Position position = new Position(0, 1);
       chessBoard.addPiece(position, king);
 
-      // Calculate available movements
       BitSet movements = king.availableMovementsMask(chessBoard, position);
 
-      // Assertions
       Assert.assertNotNull(movements);
 
       BitSet movementsExpected = new BitSet(chessBoard.getNumRows() * chessBoard.getNumColums());

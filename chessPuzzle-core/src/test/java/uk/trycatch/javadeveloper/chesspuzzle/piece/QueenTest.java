@@ -28,16 +28,13 @@ public class QueenTest {
     */
    @Test
    public void testAvailableMovementsMask_4x4_onPos_1_1() throws Exception {
-      // Initialize chess board and place a Queen
       ChessBoard chessBoard = new ChessBoard(4, 5);
       Piece queen = PieceFactory.createPiece(QUEEN);
       Position position = new Position(1, 1);
       chessBoard.addPiece(position, queen);
 
-      // Calculate available movements
       BitSet movements = queen.availableMovementsMask(chessBoard, position);
 
-      // Assertions
       Assert.assertNotNull(movements);
 
       BitSet movementsExpected = new BitSet(chessBoard.getNumRows() * chessBoard.getNumColums());

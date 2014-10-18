@@ -11,6 +11,8 @@ import uk.trycatch.javadeveloper.chesspuzzle.solverservice.PieceConfiguration;
 
 import java.util.List;
 import java.util.Stack;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Implementation of <tt>ChessPuzzleSolverService</tt> based on <tt>Backtracking</tt> algorithm.
@@ -21,6 +23,9 @@ public class BacktrackChessPuzzleSolverService implements ChessPuzzleSolverServi
 
    /** Number threads used to find all possible solutions */
    private static final int numThreadsProcess = 10;
+   /** Logger */
+   private static final Logger LOGGER = Logger.getLogger( BacktrackChessPuzzleSolverService.class.getName() );
+
 
 // -- Methods inherited from interface ChessPuzzleSolverService
 //--------------------------------------------------------------------------------------------------
@@ -193,7 +198,7 @@ public class BacktrackChessPuzzleSolverService implements ChessPuzzleSolverServi
                }
             }
          } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "", this);
          }
       }
    }
