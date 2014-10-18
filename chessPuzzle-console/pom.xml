@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
 	<parent>
-        <groupId>uk.tryCatch.javaDeveloper</groupId>
+        <groupId>uk.trycatch.javadeveloper</groupId>
         <artifactId>chessPuzzle-parent</artifactId>
         <version>1.0.0-SNAPSHOT</version>
     </parent>
@@ -17,7 +17,7 @@
 
     <dependencies>
         <dependency>
-            <groupId>uk.tryCatch.javaDeveloper</groupId>
+            <groupId>uk.trycatch.javadeveloper</groupId>
             <artifactId>chessPuzzle-core</artifactId>
         </dependency>
     </dependencies>
