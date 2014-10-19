@@ -198,7 +198,7 @@ public class BacktrackChessPuzzleSolverService implements ChessPuzzleSolverServi
                }
             }
          } catch (Exception e) {
-            LOGGER.log(Level.SEVERE, "", this);
+            LOGGER.log(Level.SEVERE, "Unexpected error");
          }
       }
    }
